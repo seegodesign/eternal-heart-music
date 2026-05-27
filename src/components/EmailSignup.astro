@@ -1,0 +1,241 @@
+---
+---
+
+<section class="signup" id="email-signup">
+  <div class="signup__bg" aria-hidden="true">
+    <div class="signup__orb signup__orb--1"></div>
+    <div class="signup__orb signup__orb--2"></div>
+  </div>
+
+  <div class="container">
+    <div class="signup__inner reveal">
+      <div class="signup__copy">
+        <span class="eyebrow">Free Gift</span>
+        <h2 class="signup__headline">
+          Receive a free<br /><em>sound journey.</em>
+        </h2>
+        <p class="signup__body">
+          Enter your email and I'll send you a free 20-minute guided meditation and
+          ambient sound journey — recorded live on the shores of Kauaʻi.
+          A gift for your nervous system.
+        </p>
+        <ul class="signup__perks">
+          <li>
+            <span class="signup__perk-dot" aria-hidden="true"></span>
+            Free 20-min sound journey MP3
+          </li>
+          <li>
+            <span class="signup__perk-dot" aria-hidden="true"></span>
+            Early access to new releases &amp; offerings
+          </li>
+          <li>
+            <span class="signup__perk-dot" aria-hidden="true"></span>
+            Notes from the practice &amp; creative process
+          </li>
+        </ul>
+      </div>
+
+      <form class="signup__form" id="email-form" novalidate>
+        <div class="signup__field">
+          <label for="signup-name" class="signup__label">Your name</label>
+          <input
+            id="signup-name"
+            name="name"
+            type="text"
+            placeholder="Your first name"
+            class="signup__input"
+            autocomplete="given-name"
+          />
+        </div>
+        <div class="signup__field">
+          <label for="signup-email" class="signup__label">Email address</label>
+          <input
+            id="signup-email"
+            name="email"
+            type="email"
+            placeholder="your@email.com"
+            class="signup__input"
+            autocomplete="email"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn--primary signup__submit">
+          Send Me the Sound Journey
+        </button>
+        <p class="signup__fine">
+          No spam, ever. Unsubscribe at any time with one click.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Section ─────────────────────────────────────────────── */
+  .signup {
+    position: relative;
+    overflow: hidden;
+    padding: 120px 0;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .signup__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .signup__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+  }
+  .signup__orb--1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(155, 85, 28, 0.2) 0%, transparent 68%);
+    top: -150px;
+    right: -100px;
+    animation: s-drift-1 18s ease-in-out infinite;
+  }
+  .signup__orb--2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(38, 62, 36, 0.18) 0%, transparent 68%);
+    bottom: -100px;
+    left: -80px;
+    animation: s-drift-2 22s ease-in-out infinite;
+  }
+  @keyframes s-drift-1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-30px, 20px); }
+  }
+  @keyframes s-drift-2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(25px, -18px); }
+  }
+
+  /* ── Inner layout ────────────────────────────────────────── */
+  .signup__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Copy ─────────────────────────────────────────────────── */
+  .signup__headline {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--color-cream);
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .signup__headline em {
+    font-style: italic;
+    color: var(--color-amber-light);
+  }
+  .signup__body {
+    font-size: 1.0rem;
+    line-height: 1.85;
+    color: var(--color-cream-dim);
+    margin-bottom: 32px;
+    max-width: 50ch;
+  }
+  .signup__perks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .signup__perks li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.9rem;
+    color: var(--color-cream-dim);
+  }
+  .signup__perk-dot {
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-amber);
+  }
+
+  /* ── Form ─────────────────────────────────────────────────── */
+  .signup__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: rgba(9, 8, 10, 0.5);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    padding: 40px;
+  }
+
+  .signup__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .signup__label {
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-cream-muted);
+  }
+  .signup__input {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    padding: 14px 16px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--color-cream);
+    width: 100%;
+    transition: border-color 0.25s ease;
+    outline: none;
+  }
+  .signup__input::placeholder { color: var(--color-cream-muted); }
+  .signup__input:focus { border-color: var(--color-amber); }
+
+  .signup__submit { width: 100%; justify-content: center; margin-top: 4px; }
+
+  .signup__fine {
+    font-size: 11px;
+    color: var(--color-cream-muted);
+    text-align: center;
+    font-family: var(--font-sans);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 840px) {
+    .signup__inner { grid-template-columns: 1fr; gap: 48px; }
+    .signup__form { padding: 32px 24px; }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('email-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // TODO: Wire up your email service (Mailchimp, ConvertKit, etc.)
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    if (btn) {
+      btn.textContent = 'Thank you — check your inbox ✓';
+      btn.disabled = true;
+      btn.style.background = 'var(--color-sage-mid)';
+      btn.style.color = 'var(--color-cream)';
+    }
+  });
+</script>

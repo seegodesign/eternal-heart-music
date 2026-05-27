@@ -1,0 +1,142 @@
+---
+const offerings = [
+  { label: "Memorial Songs", desc: "Honour a life through music that carries their essence forward." },
+  { label: "Wedding Songs",  desc: "A singular composition for the most sacred day of your lives." },
+  { label: "Healing Journeys", desc: "Music crafted around your specific emotional or physical healing." },
+  { label: "Meditation Tracks", desc: "Custom ambient soundscapes for your practice or programme." },
+  { label: "Personal Storytelling", desc: "Your story, your words — transformed into sound." },
+  { label: "Custom Compositions", desc: "Original pieces for film, meditation apps, yoga, and beyond." },
+];
+---
+
+<section class="section custom" id="custom-songs">
+  <div class="container--wide">
+    <div class="custom__inner">
+      <div class="custom__left reveal">
+        <span class="eyebrow">Custom Song Creation</span>
+        <h2 class="custom__headline">
+          Transform your<br />story into<br /><em>music.</em>
+        </h2>
+        <div class="divider"></div>
+        <p class="custom__body">
+          Some moments in life are too large for words alone. A new beginning, a loss, birth,
+          a healing — these deserve to be held in sound. Cameron works with you
+          directly to translate your experience, your intentions, and your heart
+          into a piece of music that is entirely yours.
+        </p>
+        <a href="/contact" class="btn btn--primary">
+          Start Your Journey
+        </a>
+      </div>
+
+      <div class="custom__right reveal reveal-delay-2">
+        <ul class="custom__list">
+          {
+            offerings.map((o) => (
+              <li class="custom__item">
+                <div>
+                  <strong class="custom__item-label"><span class="custom__infinity" aria-hidden="true">∞</span>{o.label}</strong>
+                  <p class="custom__item-desc">{o.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Layout ──────────────────────────────────────────────── */
+  .custom {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(9,8,10,0.82) 0%, rgba(9,8,10,0.72) 100%), url('/images/studio.avif') center/cover no-repeat;
+    background-attachment: fixed;
+  }
+  @media (max-width: 900px) {
+    .custom {
+      background-attachment: scroll;
+    }
+  }
+  .custom::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 80% at 0% 50%, rgba(185, 115, 42, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .custom__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  /* ── Left column ──────────────────────────────────────────── */
+  .custom__headline {
+    font-family: var(--font-serif);
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--color-cream);
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .custom__headline em {
+    font-style: italic;
+    color: var(--color-amber-light);
+  }
+  .custom__body {
+    font-size: 1.025rem;
+    line-height: 1.85;
+    color: var(--color-cream-dim);
+    margin-bottom: 40px;
+    max-width: 50ch;
+  }
+
+  /* ── Offerings list ───────────────────────────────────────── */
+  .custom__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .custom__item {
+    display: block;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.2s ease;
+  }
+  .custom__item-label {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-cream);
+    letter-spacing: 0.01em;
+    margin-bottom: 6px;
+  }
+  .custom__infinity {
+    display: inline-block;
+    margin-right: 8px;
+    color: var(--color-amber-light);
+    font-size: 1.5rem;
+    line-height: 1;
+    transform: translateY(-0.02em);
+  }
+  .custom__item-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--color-cream-dim);
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    .custom__inner { grid-template-columns: 1fr; gap: 56px; }
+  }
+</style>

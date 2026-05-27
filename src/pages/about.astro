@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'About Eternal Heart | Cameron Gaut';
+const description =
+  'Learn the story behind Eternal Heart, the ambient and healing music project of Cameron Gaut in Kauaʻi.';
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">About Eternal Heart</span>
+        <h1 class="section-title">Music rooted in <em>presence</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">
+          Eternal Heart is the artist project of Cameron Gaut, a bansuri flute player,
+          producer, and sound facilitator based in Kauaʻi, Hawaiʻi.
+        </p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container page-grid">
+        <article class="card page-card">
+          <h2>Artist Story</h2>
+          <p>
+            Cameron's path into healing music began with a deep curiosity about how sound
+            affects the nervous system, memory, and emotional processing. Over time, what
+            started as music production evolved into a practice of intentional listening.
+          </p>
+          <p>
+            Living in Kauaʻi shaped the project's sonic identity: ocean movement, dawn
+            birdsong, tropical rain, and quiet night recording sessions all became part of
+            the musical language.
+          </p>
+        </article>
+
+        <article class="card page-card">
+          <h2>Core Influences</h2>
+          <ul>
+            <li>Bansuri flute traditions and breath-led phrasing</li>
+            <li>Ambient and cinematic minimalism</li>
+            <li>Mindfulness and somatic healing arts</li>
+            <li>Nature field recordings and organic textures</li>
+          </ul>
+        </article>
+
+        <article class="card page-card">
+          <h2>Mission</h2>
+          <p>
+            To create music and experiences that support regulation, reflection, and inner
+            connection. Every release and session is designed to help listeners return to a
+            grounded, heart-centered state.
+          </p>
+          <a class="btn btn--primary" href="/contact">Work Together</a>
+        </article>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+  .page-card { padding: 30px; }
+  .page-card h2 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .page-card p,
+  .page-card li {
+    color: var(--color-cream-dim);
+    line-height: 1.8;
+  }
+  .page-card ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .page-card .btn { margin-top: 16px; }
+  @media (max-width: 900px) {
+    .page-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const title = 'FAQ | Eternal Heart';
+const description =
+  'Frequently asked questions about sound healing sessions, custom songs, events, and music releases by Eternal Heart.';
+
+const faqs = (await getCollection('faq'))
+  .filter((entry) => entry.data.active)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">FAQ</span>
+        <h1 class="section-title">Questions about sessions, music, and <em>booking</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">Answers to the most common inquiries.</p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container faq-list">
+        {
+          faqs.map((item) => (
+            <details class="card faq-item">
+              <summary>{item.data.question}</summary>
+              <p>{item.data.answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .faq-list {
+    display: grid;
+    gap: 14px;
+  }
+  .faq-item { padding: 18px 22px; }
+  .faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    color: var(--color-cream);
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item p {
+    margin: 10px 0 0;
+    color: var(--color-cream-dim);
+    line-height: 1.8;
+  }
+</style>

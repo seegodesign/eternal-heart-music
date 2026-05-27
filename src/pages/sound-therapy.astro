@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Sound Therapy Services | Eternal Heart';
+const description =
+  'Private and group sound healing sessions, meditation journeys, retreats, and wellness collaborations.';
+
+const offerings = [
+  'Private sound healing sessions',
+  'Group sound bath ceremonies',
+  'Meditation sound journeys',
+  'Retreat and wellness collaborations',
+  'Senior home and care facility performances',
+  'Conscious event sound facilitation',
+];
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">Sound Therapy</span>
+        <h1 class="section-title">Therapeutic sound for <em>regulation and renewal</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">
+          Sessions are designed to calm the nervous system, support emotional integration,
+          and create a space for rest and reflection.
+        </p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container page-grid">
+        <article class="card page-card">
+          <h2>Services</h2>
+          <ul>
+            {offerings.map((offering) => <li>{offering}</li>)}
+          </ul>
+        </article>
+        <article class="card page-card">
+          <h2>What to Expect</h2>
+          <ol>
+            <li>Brief check-in and intention setting</li>
+            <li>Guided breath and grounding</li>
+            <li>Immersive live sound session</li>
+            <li>Integration and aftercare guidance</li>
+          </ol>
+        </article>
+        <article class="card page-card">
+          <h2>Book a Session</h2>
+          <p>
+            Sessions are available in Kauaʻi and for select destination retreats.
+            Reach out with your goals and preferred format.
+          </p>
+          <a class="btn btn--primary" href="/contact">Request Booking</a>
+        </article>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+  .page-card { padding: 30px; }
+  .page-card h2 {
+    margin-bottom: 12px;
+    font-family: var(--font-serif);
+    font-weight: 500;
+  }
+  .page-card p,
+  .page-card li {
+    color: var(--color-cream-dim);
+    line-height: 1.8;
+  }
+  .page-card ul,
+  .page-card ol {
+    padding-left: 18px;
+    margin: 0;
+  }
+  .page-card .btn { margin-top: 16px; }
+  @media (max-width: 900px) {
+    .page-grid { grid-template-columns: 1fr; }
+  }
+</style>

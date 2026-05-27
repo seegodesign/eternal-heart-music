@@ -1,0 +1,156 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: your-org/eternal-heart
+  branch: main
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+site_url: https://example.com
+display_url: https://example.com
+
+collections:
+  - name: journal
+    label: Journal Entries
+    label_singular: Journal Entry
+    folder: /src/content/journal
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} - {{category}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Cover Image, name: coverImage, widget: image }
+      - { label: Excerpt, name: excerpt, widget: text }
+      -
+        label: Category
+        name: category
+        widget: select
+        options:
+          - Sound Science
+          - Bansuri
+          - Process
+          - Sound Healing
+          - Meditation
+      -
+        label: Publish Date
+        name: date
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: YYYY-MM-DD
+        time_format: false
+      - { label: Read Time, name: readTime, widget: string, required: false }
+      -
+        label: Gradient
+        name: gradient
+        widget: select
+        options: [amber, sage, ocean]
+        default: amber
+      - { label: Body, name: body, widget: markdown }
+
+  - name: releases
+    label: Releases
+    label_singular: Release
+    folder: /src/content/releases
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} - {{type}} ({{year}})'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Year, name: year, widget: number, value_type: int }
+      -
+        label: Type
+        name: type
+        widget: select
+        options: [Album, Single, EP]
+      - { label: Description, name: description, widget: text }
+      -
+        label: Hue
+        name: hue
+        widget: select
+        options: [amber, sage, ocean]
+      - { label: Artwork, name: artwork, widget: image }
+      - { label: Bandcamp URL, name: bandcamp, widget: string }
+      - { label: Spotify URL, name: spotify, widget: string }
+      - { label: Show on Homepage, name: showOnHomepage, widget: boolean, default: false }
+
+  - name: events
+    label: Events
+    label_singular: Event
+    folder: /src/content/events
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} - {{date}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      -
+        label: Date
+        name: date
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: YYYY-MM-DD
+        time_format: false
+      - { label: Location, name: location, widget: string }
+      - { label: Event Type, name: type, widget: string }
+      - { label: Availability Label, name: spots, widget: string }
+      - { label: Mark as Past Event, name: isPast, widget: boolean, default: false }
+      - { label: CTA Label, name: ctaLabel, widget: string, default: Reserve }
+      - { label: CTA URL, name: ctaUrl, widget: string, default: /contact }
+
+  - name: faq
+    label: FAQ Items
+    label_singular: FAQ Item
+    folder: /src/content/faq
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{question}}'
+    fields:
+      - { label: Question, name: question, widget: string }
+      - { label: Answer, name: answer, widget: text }
+      - { label: Category, name: category, widget: string, default: General }
+      - { label: Sort Order, name: sortOrder, widget: number, value_type: int, default: 100 }
+      - { label: Active, name: active, widget: boolean, default: true }
+
+  - name: testimonials
+    label: Testimonials
+    label_singular: Testimonial
+    folder: /src/content/testimonials
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{quote}} - {{author}}'
+    fields:
+      - { label: Quote, name: quote, widget: text }
+      - { label: Author, name: author, widget: string }
+      - { label: Source, name: source, widget: string, required: false }
+      - { label: Location, name: location, widget: string, required: false }
+      - { label: Featured, name: featured, widget: boolean, default: false }
+      - { label: Sort Order, name: sortOrder, widget: number, value_type: int, default: 100 }
+
+  - name: soundTherapy
+    label: Sound Therapy Services
+    label_singular: Sound Therapy Service
+    folder: /src/content/sound-therapy
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} - {{category}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text }
+      - { label: Icon, name: icon, widget: string }
+      - { label: Category, name: category, widget: string, required: false }
+      - { label: Audience, name: audience, widget: string, required: false }
+      - { label: Sort Order, name: sortOrder, widget: number, value_type: int, default: 100 }
+      - { label: Featured, name: isFeatured, widget: boolean, default: false }

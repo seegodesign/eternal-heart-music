@@ -1,0 +1,223 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+
+const slugFromEntryId = (id: string) => id.replace(/\.md$/i, '');
+
+export async function getStaticPaths() {
+  const posts = await getCollection('journal');
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/i, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  year: 'numeric',
+}).format(post.data.date);
+
+const title = `${post.data.title} | Eternal Heart Journal`;
+const description = post.data.excerpt;
+const relatedPosts = (await getCollection('journal'))
+  .filter((item) => item.id !== post.id)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="article-main">
+    <section class="section section--sm article-hero">
+      <div class="container article-hero__inner">
+        <a href="/journal" class="article-back">← Back to Journal</a>
+        <p class="article-meta">{post.data.category} · {formattedDate} · {post.data.readTime ?? '5 min read'}</p>
+        <h1 class="section-title">{post.data.title}</h1>
+        <div class="divider"></div>
+        <p class="section-body">{post.data.excerpt}</p>
+        <img
+          src={post.data.coverImage}
+          alt={post.data.title}
+          class="article-cover"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    </section>
+
+    <section class="section article-content">
+      <div class="container article-content__inner">
+        <Content />
+      </div>
+    </section>
+
+    <section class="section section--sm article-more">
+      <div class="container">
+        <h2 class="article-more__title">More Field Notes</h2>
+        <div class="article-more__grid">
+          {
+            relatedPosts
+              .map((item) => (
+                <article class="card article-more__card">
+                  <img
+                    src={item.data.coverImage}
+                    alt={item.data.title}
+                    class="article-more__cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <p class="article-more__meta">{item.data.category}</p>
+                  <h3>{item.data.title}</h3>
+                  <p>{item.data.excerpt}</p>
+                  <a href={`/journal/${slugFromEntryId(item.id)}`} class="article-more__link">Read article</a>
+                </article>
+              ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .article-main { padding-top: 90px; }
+  .article-hero { padding-bottom: 32px; }
+
+  .article-hero__inner {
+    max-width: 860px;
+  }
+
+  .article-back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--color-amber-light);
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .article-meta {
+    color: var(--color-cream-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .article-content {
+    padding-top: 10px;
+    padding-bottom: 40px;
+  }
+
+  .article-cover {
+    width: 100%;
+    max-height: 480px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid var(--color-border);
+    margin-top: 28px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+  }
+
+  .article-content__inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 34px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+  }
+
+  .article-content__inner :global(p) {
+    color: var(--color-cream-dim);
+    line-height: 1.95;
+    font-size: 1.02rem;
+    margin: 0 0 24px;
+  }
+
+  .article-content__inner :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .article-more {
+    padding-top: 20px;
+  }
+
+  .article-more__title {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--color-cream);
+    margin-bottom: 20px;
+  }
+
+  .article-more__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .article-more__card {
+    padding: 0 0 22px;
+    overflow: hidden;
+  }
+
+  .article-more__cover {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .article-more__card :is(.article-more__meta, h3, p, .article-more__link) {
+    margin-left: 22px;
+    margin-right: 22px;
+  }
+
+  .article-more__meta {
+    color: var(--color-amber-light);
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .article-more__card h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    margin: 0 0 8px;
+    color: var(--color-cream);
+  }
+
+  .article-more__card p {
+    color: var(--color-cream-dim);
+    line-height: 1.7;
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  .article-more__link {
+    color: var(--color-amber-light);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .article-more__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .article-content__inner {
+      padding: 24px;
+    }
+  }
+</style>

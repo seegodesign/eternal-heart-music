@@ -1,0 +1,174 @@
+---
+import { getCollection } from 'astro:content';
+
+const services = (await getCollection('soundTherapy'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<section class="section therapy" id="sound-therapy">
+  <div class="therapy__bg-orb" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="therapy__header reveal">
+      <span class="eyebrow">Sound Healing</span>
+      <h2 class="section-title">
+        Enter the <em>sanctuary</em><br />
+        of sound.
+      </h2>
+      <div class="divider"></div>
+      <p class="section-body">
+        Sound is not merely heard — it is felt. Through bansuri flute, hand pans, and resonant bowls,
+        and carefully crafted sonic landscapes, these experiences guide the nervous system
+        toward a state of deep rest, openness, and renewal.
+      </p>
+    </div>
+
+    <div class="therapy__grid">
+      {
+        services.map((s, i) => (
+          <div class={`therapy-card reveal reveal-delay-${(i % 3) + 1}`}>
+            <div class="therapy-card__icon">
+              <img src={s.data.icon} alt="" width="28" height="28" aria-hidden="true" />
+            </div>
+            <h3 class="therapy-card__title">{s.data.title}</h3>
+            <p class="therapy-card__desc">{s.data.description}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="therapy__cta reveal">
+      <p class="therapy__cta-text">
+        Every session is personal. Reach out to discuss what kind of experience
+        feels right for you, your community, or your event.
+      </p>
+      <a href="/contact" class="btn btn--primary">
+        Book a Session
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Background accent ─────────────────────────────────────── */
+  .therapy {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(9,8,10,0.82) 0%, rgba(9,8,10,0.72) 100%), url('/images/bowls.avif') center/cover no-repeat;
+    background-attachment: fixed;
+  }
+  @media (max-width: 900px) {
+    .therapy {
+      background-attachment: scroll;
+    }
+  }
+  .therapy__bg-orb {
+    position: absolute;
+    top: 40%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(40, 56, 36, 0.28) 0%, transparent 68%);
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+  }
+
+  /* ── Header ──────────────────────────────────────────────── */
+  .therapy__header {
+    max-width: 640px;
+    margin-bottom: 72px;
+  }
+
+  /* ── Services grid ────────────────────────────────────────── */
+  .therapy__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 80px;
+  }
+
+  /* ── Service card ─────────────────────────────────────────── */
+  .therapy-card {
+    padding: 40px 32px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    transition: background 0.35s ease, border-color 0.35s ease;
+    position: relative;
+  }
+  .therapy-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--color-amber-dim), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .therapy-card:hover {
+    background: var(--color-surface-2);
+    border-color: var(--color-border-hi);
+  }
+  .therapy-card:hover::before { opacity: 1; }
+
+  .therapy-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 3px;
+    background: rgba(200, 136, 58, 0.08);
+    border: 1px solid rgba(200, 136, 58, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .therapy-card__icon img {
+    opacity: 0.95;
+    filter: brightness(0) invert(1);
+  }
+
+  .therapy-card__title {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--color-cream);
+    margin-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  .therapy-card__desc {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--color-cream-dim);
+  }
+
+  /* ── CTA block ────────────────────────────────────────────── */
+  .therapy__cta {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding: 48px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+  }
+  .therapy__cta-text {
+    flex: 1;
+    font-size: 1.5rem;
+    line-height: 1.75;
+    color: var(--color-cream-dim);
+    min-width: 260px;
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .therapy__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 580px) {
+    .therapy__grid { grid-template-columns: 1fr; }
+    .therapy__cta { flex-direction: column; align-items: flex-start; gap: 24px; padding: 32px 24px; }
+  }
+</style>

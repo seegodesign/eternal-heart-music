@@ -1,0 +1,226 @@
+---
+const clips = [
+  {
+    title: "Late Night Studio Session",
+    desc: "Bansuri layering over ambient drones — finding the melody that wants to emerge.",
+    tag: "Process",
+    gradient: "amber",
+  },
+  {
+    title: "Forest Field Recording",
+    desc: "Capturing the dawn chorus in the Kauaʻi uplands — birds, wind, and the sound of rain on leaves.",
+    tag: "Field Recording",
+    gradient: "sage",
+  },
+  {
+    title: "Flute Improvisation",
+    desc: "An unedited morning improvisation recorded at the shoreline as the tide came in.",
+    tag: "Flute",
+    gradient: "ocean",
+  },
+];
+---
+
+<!-- <section class="section process" id="process">
+  <div class="container">
+    <div class="process__header reveal">
+      <span class="eyebrow">The Creative Process</span>
+      <h2 class="section-title">
+        Music born from<br /><em>presence.</em>
+      </h2>
+      <div class="divider"></div>
+      <p class="section-body">
+        Not a professional studio. Not a perfect room. Just a bedroom, a bamboo flute,
+        a few microphones, and a deep commitment to being honest with the moment.
+        The process is the practice.
+      </p>
+    </div>
+
+    <div class="process__grid">
+      {
+        clips.map((c, i) => (
+          <div class={`process-card reveal reveal-delay-${i + 1}`}>
+            <div class={`process-card__thumb process-card__thumb--${c.gradient}`}>
+              <div class="process-card__thumb-inner" aria-hidden="true"></div>
+              <span class="process-card__tag">{c.tag}</span>
+              <div class="process-card__play" aria-label="Watch video">
+                <img src="/icons/play.svg" alt="" width="18" height="18" />
+              </div>
+            </div>
+            <div class="process-card__body">
+              <h3 class="process-card__title">{c.title}</h3>
+              <p class="process-card__desc">{c.desc}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="process__quote reveal">
+      <blockquote class="process__blockquote">
+        "I'm not trying to make impressive music. I'm trying to make true music."
+        <cite>— Cameron Gaut</cite>
+      </blockquote>
+    </div>
+  </div>
+</section> -->
+
+<style>
+  .process {
+    position: relative;
+    overflow: hidden;
+  }
+  .process::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: -15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(28, 44, 26, 0.2) 0%, transparent 68%);
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .process__header {
+    max-width: 640px;
+    margin-bottom: 64px;
+  }
+
+  /* ── Grid ─────────────────────────────────────────────────── */
+  .process__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 72px;
+  }
+
+  /* ── Process card ─────────────────────────────────────────── */
+  .process-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .process-card__thumb {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: 3px 3px 0 0;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .process-card__thumb-inner {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.6s ease;
+  }
+  .process-card:hover .process-card__thumb-inner {
+    transform: scale(1.04);
+  }
+
+  /* Gradient themes */
+  .process-card__thumb--amber .process-card__thumb-inner {
+    background:
+      radial-gradient(ellipse 80% 80% at 30% 40%, rgba(155, 85, 30, 0.55) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 60% at 80% 70%, rgba(80, 45, 12, 0.35) 0%, transparent 60%),
+      #110e0b;
+  }
+  .process-card__thumb--sage .process-card__thumb-inner {
+    background:
+      radial-gradient(ellipse 80% 80% at 50% 30%, rgba(44, 72, 38, 0.55) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 60% at 20% 80%, rgba(22, 44, 20, 0.35) 0%, transparent 60%),
+      #0c0f0c;
+  }
+  .process-card__thumb--ocean .process-card__thumb-inner {
+    background:
+      radial-gradient(ellipse 80% 80% at 60% 35%, rgba(22, 52, 80, 0.55) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 60% at 20% 70%, rgba(12, 32, 52, 0.35) 0%, transparent 60%),
+      #0b0d10;
+  }
+
+  .process-card__tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(232, 220, 200, 0.75);
+    background: rgba(9, 8, 10, 0.55);
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    z-index: 2;
+  }
+
+  .process-card__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    opacity: 0;
+    background: rgba(9, 8, 10, 0.3);
+    transition: opacity 0.3s ease;
+  }
+  .process-card__play > img {
+    filter: invert(1);
+    transform: scale(1.4);
+  }
+  .process-card:hover .process-card__play { opacity: 1; }
+
+  .process-card__body {
+    padding: 22px 0 0;
+  }
+  .process-card__title {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--color-cream);
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .process-card__desc {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--color-cream-dim);
+  }
+
+  /* ── Quote ────────────────────────────────────────────────── */
+  .process__quote {
+    padding: 56px 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .process__blockquote {
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--color-cream-dim);
+    line-height: 1.5;
+    max-width: 680px;
+  }
+  .process__blockquote cite {
+    display: block;
+    margin-top: 20px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+    font-style: normal;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .process__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .process__grid { grid-template-columns: 1fr; }
+  }
+</style>

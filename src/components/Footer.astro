@@ -1,0 +1,302 @@
+---
+const navLinks = [
+  { href: "#music", label: "Listen" },
+  { href: "#sound-therapy", label: "Sound Journeys" },
+  { href: "#custom-songs", label: "Custom Songs" },
+  { href: "#about", label: "About" },
+  { href: "#events", label: "Events" },
+  { href: "#journal", label: "Journal" },
+];
+
+const socialLinks = [
+  {
+    name: "Spotify",
+    icon: "/icons/spotify.svg",
+    href: "https://open.spotify.com/artist/5hJwEvmHfjZ48gTq6BAt3x",
+  },
+  {
+    name: "Bandcamp",
+    icon: "/icons/bandcamp.svg",
+    href: "https://eternalheart.bandcamp.com/follow_me",
+  },
+  {
+    name: "Instagram",
+    icon: "/icons/instagram.svg",
+    href: "https://instagram.com/eternal.heart.music",
+  },
+  {
+    name: "Facebook",
+    icon: "/icons/facebook.svg",
+    href: "https://facebook.com/eternal.heart.music",
+  },
+  {
+    name: "TikTok",
+    icon: "/icons/tiktok.svg",
+    href: "https://tiktok.com/@eternal.heart.music",
+  },
+  {
+    name: "YouTube",
+    icon: "/icons/youtube.svg",
+    href: "https://www.youtube.com/@eternal-heart-music",
+  },
+];
+---
+
+<footer class="footer">
+  <div class="footer__glow" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="/" aria-label="Eternal Heart home">
+          <img
+            src="/logo.svg"
+            alt="Eternal Heart"
+            width="148"
+            height="32"
+            class="footer__logo"
+          />
+        </a>
+        <p class="footer__tagline">
+          Music for the heart,<br />nervous system, and soul.
+        </p>
+        <div class="footer__socials">
+          {
+            socialLinks.map((s) => (
+              <a
+                href={s.href}
+                class="footer__social"
+                aria-label={s.name}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={s.icon}
+                  alt=""
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <p class="footer__nav-title">Navigate</p>
+        {
+          navLinks.map((l) => (
+            <a href={l.href} class="footer__nav-link">
+              {l.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="footer__contact">
+        <p class="footer__nav-title">Connect</p>
+        <a
+          href="mailto:hello@eternalheartmusic.com"
+          class="footer__contact-link"
+        >
+          hello@eternalheartmusic.com
+        </a>
+        <p class="footer__contact-note">
+          Based on Kauaʻi, Hawaiʻi.<br />
+          Available for retreats,<br />
+          events &amp; collaborations.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">
+        © {new Date().getFullYear()} Eternal Heart · Cameron Gaut · All rights reserved.
+      </p>
+      <p class="footer__made">Made with intention on Kauaʻi ◊</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* ── Footer shell ─────────────────────────────────────────── */
+  .footer {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 80px 0 40px;
+  }
+
+  .footer__glow {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 300px;
+    background: radial-gradient(
+      circle,
+      rgba(155, 85, 28, 0.1) 0%,
+      transparent 68%
+    );
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
+  /* ── Top grid ─────────────────────────────────────────────── */
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1fr 180px 220px;
+    gap: 64px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Brand column */
+  .footer__logo {
+    display: block;
+    margin-bottom: 20px;
+  }
+  .footer__tagline {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--color-cream-dim);
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .footer__socials {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .footer__social {
+    width: 36px;
+    height: 36px;
+    border-radius: 2px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      border-color 0.25s ease,
+      background 0.25s ease;
+  }
+  .footer__social img {
+    opacity: 0.85;
+    transition:
+      opacity 0.25s ease,
+      filter 0.25s ease;
+    filter: brightness(0) saturate(100%) invert(89%) sepia(17%) saturate(307%)
+      hue-rotate(352deg) brightness(96%) contrast(90%);
+  }
+  .footer__social:hover {
+    border-color: var(--color-amber);
+    background: var(--color-surface-2);
+  }
+  .footer__social:hover img {
+    opacity: 1;
+    filter: brightness(0) saturate(100%) invert(74%) sepia(26%) saturate(1034%)
+      hue-rotate(346deg) brightness(97%) contrast(88%);
+  }
+
+  /* Nav column */
+  .footer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .footer__nav-title {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+    margin-bottom: 4px;
+  }
+  .footer__nav-link {
+    font-size: 0.9rem;
+    color: var(--color-cream-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-family: var(--font-sans);
+    font-weight: 300;
+  }
+  .footer__nav-link:hover {
+    color: var(--color-cream);
+  }
+
+  /* Contact column */
+  .footer__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .footer__contact-link {
+    font-size: 0.9rem;
+    color: var(--color-amber-light);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    transition: color 0.2s ease;
+  }
+  .footer__contact-link:hover {
+    color: var(--color-amber);
+  }
+  .footer__contact-note {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: var(--color-cream-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+
+  /* ── Bottom bar ───────────────────────────────────────────── */
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+  .footer__copy,
+  .footer__made {
+    font-size: 11.5px;
+    color: var(--color-cream-muted);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 800px) {
+    .footer__top {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 480px) {
+    .footer__top {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+</style>

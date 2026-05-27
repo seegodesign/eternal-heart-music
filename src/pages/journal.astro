@@ -1,0 +1,114 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const title = 'Journal | Eternal Heart';
+const description =
+  'Read reflections on healing through sound, meditation music, creativity, and the bansuri flute path.';
+
+const posts = (await getCollection('journal')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const slugFromEntryId = (id: string) => id.replace(/\.md$/i, '');
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">Journal</span>
+        <h1 class="section-title">Field notes from the <em>practice</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">
+          Writings on ambient composition, healing arts, meditation, and creative process.
+        </p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container post-grid">
+        {
+          posts.map((post) => (
+            <article class="card post-card">
+              <img
+                src={post.data.coverImage}
+                alt={post.data.title}
+                class="post-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <p class="post-meta">{post.data.category}</p>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.excerpt}</p>
+              <a href={`/journal/${slugFromEntryId(post.id)}`} class="post-link">Read article</a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .post-card {
+    padding: 0;
+    overflow: hidden;
+  }
+  .post-cover {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+  .post-card :is(.post-meta, h2, p, .post-link) {
+    margin-left: 28px;
+    margin-right: 28px;
+  }
+  .post-card .post-meta {
+    margin-top: 20px;
+  }
+  .post-card .post-link {
+    display: inline-block;
+    margin-bottom: 28px;
+  }
+  .post-meta {
+    color: var(--color-amber-light);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .post-card h2 {
+    font-family: var(--font-serif);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .post-card p {
+    color: var(--color-cream-dim);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  .post-link {
+    color: var(--color-amber-light);
+    text-decoration: none;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  @media (max-width: 900px) {
+    .post-grid { grid-template-columns: 1fr; }
+  }
+</style>

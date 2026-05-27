@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Custom Songs | Eternal Heart';
+const description =
+  'Commission custom songs for memorials, weddings, healing journeys, and personal storytelling.';
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">Custom Song Creation</span>
+        <h1 class="section-title">Transform your story into <em>music</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">
+          Commission a one-of-one piece crafted from your memory, intention, and emotional landscape.
+        </p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container steps-grid">
+        <article class="card step-card">
+          <h2>1. Discovery Call</h2>
+          <p>We discuss your story, emotional tone, references, and desired outcome.</p>
+        </article>
+        <article class="card step-card">
+          <h2>2. Composition</h2>
+          <p>Melody, harmony, and texture are developed around your narrative and intention.</p>
+        </article>
+        <article class="card step-card">
+          <h2>3. Refinement</h2>
+          <p>You receive draft versions and feedback rounds before final delivery.</p>
+        </article>
+        <article class="card step-card">
+          <h2>4. Final Delivery</h2>
+          <p>Mastered audio files are delivered for personal keepsakes, ceremony, or gifting.</p>
+        </article>
+      </div>
+      <div class="container cta-wrap">
+        <a class="btn btn--primary" href="/contact">Start a Custom Song</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .step-card { padding: 28px; }
+  .step-card h2 {
+    margin-bottom: 10px;
+    font-family: var(--font-serif);
+    font-weight: 500;
+  }
+  .step-card p { color: var(--color-cream-dim); line-height: 1.8; }
+  .cta-wrap { margin-top: 30px; }
+  @media (max-width: 820px) {
+    .steps-grid { grid-template-columns: 1fr; }
+  }
+</style>

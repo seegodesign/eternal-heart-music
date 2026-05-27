@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Contact | Eternal Heart';
+const description =
+  'Book sound journeys, request custom songs, or reach out for retreats and creative collaborations.';
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">Contact</span>
+        <h1 class="section-title">Let’s create something <em>meaningful</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">
+          Reach out for bookings, commissions, retreat partnerships, and media requests.
+        </p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container contact-grid">
+        <article class="card contact-card">
+          <h2>General Inquiries</h2>
+          <p>Email: <a href="mailto:hello@eternalheartmusic.com">hello@eternalheartmusic.com</a></p>
+          <p>Based in Kauaʻi, Hawaiʻi. Available internationally for select projects.</p>
+        </article>
+        <article class="card contact-card">
+          <h2>Bookings</h2>
+          <p>Sound baths, retreats, workshops, and private healing sessions.</p>
+          <a class="btn btn--primary" href="mailto:hello@eternalheartmusic.com?subject=Booking%20Inquiry">
+            Request Booking
+          </a>
+        </article>
+        <article class="card contact-card">
+          <h2>Follow & Listen</h2>
+          <ul>
+            <li><a href="https://open.spotify.com/artist/5hJwEvmHfjZ48gTq6BAt3x" target="_blank" rel="noopener noreferrer">Spotify</a></li>
+            <li><a href="https://instagram.com/eternal.heart.music" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+            <li><a href="https://eternalheart.bandcamp.com/follow_me" target="_blank" rel="noopener noreferrer">Bandcamp</a></li>
+            <li><a href="https://www.youtube.com/@eternal-heart-music" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+  .contact-card { padding: 28px; }
+  .contact-card h2 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .contact-card p,
+  .contact-card li {
+    color: var(--color-cream-dim);
+    line-height: 1.8;
+  }
+  .contact-card a { color: var(--color-amber-light); text-decoration: none; }
+  .contact-card ul { margin: 0; padding-left: 18px; }
+  .contact-card .btn {
+    margin-top: 12px;
+    color: white;
+  }
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>

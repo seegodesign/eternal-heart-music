@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+
+const events = (await getCollection('events'))
+  .filter((entry) => !entry.data.isPast)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'short' });
+const dayFormatter = new Intl.DateTimeFormat('en-US', { day: '2-digit' });
+---
+
+<section class="section events" id="events">
+  <div class="sep"></div>
+
+  <div class="container">
+    <div class="events__header">
+      <div class="reveal">
+        <span class="eyebrow">Upcoming Experiences</span>
+        <h2 class="section-title">
+          Gather in the<br /><em>sound.</em>
+        </h2>
+        <div class="divider"></div>
+        <p class="section-body">
+          Sound baths, meditation ceremonies, retreats, and conscious events
+          across Kauai and beyond. Each gathering is intimate, intentional,
+          and held with care.
+        </p>
+      </div>
+    </div>
+
+    <div class="events__list">
+      {
+        events.map((e, i) => (
+          <div class={`event-row reveal reveal-delay-${Math.min(i + 1, 5)}`}>
+            <div class="event-row__date">
+              <span class="event-row__month">{monthFormatter.format(e.data.date)}</span>
+              <span class="event-row__day">{dayFormatter.format(e.data.date)}</span>
+            </div>
+            <div class="event-row__info">
+              <h3 class="event-row__title">{e.data.title}</h3>
+              <p class="event-row__location">{e.data.location}</p>
+            </div>
+            <div class="event-row__meta">
+              <span class="event-row__type">{e.data.type}</span>
+              <span class={`event-row__spots ${e.data.spots === 'Open' ? 'event-row__spots--open' : ''}`}>
+                {e.data.spots}
+              </span>
+            </div>
+            <div class="event-row__action">
+              <a href={e.data.ctaUrl} class="btn btn--outline event-row__btn">
+                {e.data.ctaLabel}
+              </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="events__footer reveal">
+      <p class="events__footer-text">
+        Available for private events, festivals, retreats, and corporate wellness programmes worldwide.
+      </p>
+      <a href="/contact" class="btn btn--ghost">Enquire about booking</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Header ──────────────────────────────────────────────── */
+  .events__header {
+    max-width: 640px;
+    margin-bottom: 64px;
+  }
+
+  /* ── Event rows ───────────────────────────────────────────── */
+  .events__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 64px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .event-row {
+    display: grid;
+    grid-template-columns: 72px 1fr auto auto;
+    gap: 32px;
+    align-items: center;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.25s ease;
+  }
+  .event-row:hover {
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 0 -16px;
+    background: var(--color-surface);
+    border-radius: 2px;
+  }
+
+  /* Date column */
+  .event-row__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .event-row__month {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+  }
+  .event-row__day {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--color-cream);
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  /* Info column */
+  .event-row__title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--color-cream);
+    letter-spacing: 0.01em;
+    margin-bottom: 6px;
+  }
+  .event-row__location {
+    font-size: 0.875rem;
+    color: var(--color-cream-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Meta column */
+  .event-row__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .event-row__type {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232, 220, 200, 0.45);
+  }
+  .event-row__spots {
+    font-size: 11px;
+    color: var(--color-amber-dim);
+    font-family: var(--font-sans);
+    font-weight: 400;
+  }
+  .event-row__spots--open { color: var(--color-sage); }
+
+  /* Action column */
+  .event-row__action { flex-shrink: 0; }
+  .event-row__btn { font-size: 10.5px; padding: 9px 18px; }
+
+  /* ── Footer ───────────────────────────────────────────────── */
+  .events__footer {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+  }
+  .events__footer-text {
+    flex: 1;
+    font-size: 0.975rem;
+    color: var(--color-cream-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+    min-width: 240px;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 720px) {
+    .event-row {
+      grid-template-columns: 64px 1fr;
+      grid-template-rows: auto auto;
+    }
+    .event-row__meta { display: none; }
+    .event-row__action {
+      grid-column: 2;
+      justify-self: start;
+    }
+    .event-row:hover {
+      padding-left: 12px;
+      padding-right: 12px;
+      margin: 0 -12px;
+    }
+  }
+  @media (max-width: 480px) {
+    .events__footer { flex-direction: column; align-items: flex-start; gap: 20px; }
+  }
+</style>

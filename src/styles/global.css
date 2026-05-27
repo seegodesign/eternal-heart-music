@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+@theme {
+  --font-serif: "Cormorant Garamond", "Georgia", serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+
+  --color-bg:          #09080a;
+  --color-surface:     #110e0b;
+  --color-surface-2:   #1a1612;
+  --color-border:      rgba(200, 136, 58, 0.1);
+  --color-border-hi:   rgba(200, 136, 58, 0.28);
+
+  --color-amber:       #c8883a;
+  --color-amber-light: #dba45e;
+  --color-amber-dim:   #7a5220;
+
+  --color-cream:       #e8dcc8;
+  --color-cream-dim:   #b0a088;
+  --color-cream-muted: #706050;
+
+  --color-sage:        #7a9070;
+  --color-sage-deep:   #283824;
+  --color-sage-mid:    #445840;
+}
+
+/* ─── Reset & Base ──────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(200, 136, 58, 0.35);
+  color: var(--color-cream);
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-amber-dim); border-radius: 2px; }
+
+/* ─── Scroll Reveal ─────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.22s; }
+.reveal-delay-3 { transition-delay: 0.34s; }
+.reveal-delay-4 { transition-delay: 0.46s; }
+.reveal-delay-5 { transition-delay: 0.58s; }
+.reveal-delay-6 { transition-delay: 0.70s; }
+
+/* ─── Layout Primitives ─────────────────────────────────────── */
+.section {
+  padding: 130px 0;
+}
+.section--sm {
+  padding: 80px 0;
+}
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.container--wide {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ─── Typography Utilities ──────────────────────────────────── */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.12;
+  color: var(--color-cream);
+  letter-spacing: -0.01em;
+}
+.section-title em {
+  font-style: italic;
+  color: var(--color-amber-light);
+}
+
+.section-body {
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  color: var(--color-cream-dim);
+  max-width: 58ch;
+}
+
+.divider {
+  width: 44px;
+  height: 1px;
+  background: var(--color-amber);
+  margin: 24px 0;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 36px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+.btn--primary {
+  background: var(--color-amber);
+  color: #0a0807;
+}
+.btn--primary:hover {
+  background: var(--color-amber-light);
+  transform: translateY(-2px);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--color-cream);
+  border: 1px solid rgba(232, 220, 200, 0.28);
+}
+.btn--ghost:hover {
+  border-color: var(--color-amber);
+  color: var(--color-amber-light);
+  transform: translateY(-2px);
+}
+.btn--outline {
+  background: transparent;
+  color: var(--color-amber);
+  border: 1px solid var(--color-amber);
+}
+.btn--outline:hover {
+  background: var(--color-amber);
+  color: #0a0807;
+  transform: translateY(-2px);
+}
+
+/* ─── Card Base ─────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+.card:hover {
+  border-color: var(--color-border-hi);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* ─── Grain Overlay ─────────────────────────────────────────── */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+  pointer-events: none;
+}
+
+/* ─── Section Separator ─────────────────────────────────────── */
+.sep {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-border), transparent);
+}

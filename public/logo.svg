@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 40" fill="none">
+  <!-- Small diamond glyph -->
+  <path d="M10 20 L18 12 L26 20 L18 28 Z" fill="#c8883a" opacity="0.9"/>
+  <!-- Wordmark -->
+  <text x="36" y="28" font-family="Georgia, serif" font-size="17" font-weight="400" fill="#e8dcc8" letter-spacing="3">ETERNAL HEART</text>
+</svg>

@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Press & Media | Eternal Heart';
+const description =
+  'Press coverage, interviews, and media resources for Eternal Heart and Cameron Gaut.';
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">Press & Media</span>
+        <h1 class="section-title">Coverage, interviews, and <em>press resources</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">For journalists, podcast hosts, event producers, and collaborators.</p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container press-grid">
+        <article class="card press-card">
+          <h2>Featured Coverage</h2>
+          <ul>
+            <li><a href="https://www.pressreader.com/uk/tjpl-news-9Y9N/20250101/282235196297238" target="_blank" rel="noopener noreferrer">TJPL News: Raga Riddims Album Review</a></li>
+            <li><a href="https://dulaxi.com/eternal-heart-unveils-raga-riddims-where-indian-classical-elegance-meets-reggae-dub-grooves/" target="_blank" rel="noopener noreferrer">Dulaxi Feature: Raga Riddims</a></li>
+            <li><a href="https://www.theothersidereviews.com/a-chat-with-eternal-heart-11-12-24/" target="_blank" rel="noopener noreferrer">The Other Side Reviews Interview</a></li>
+          </ul>
+        </article>
+        <article class="card press-card">
+          <h2>Media Inquiries</h2>
+          <p>
+            For interview requests, podcast appearances, and editorial opportunities,
+            email:
+          </p>
+          <p><a href="/contact">hello@eternalheartmusic.com</a></p>
+          <a class="btn btn--outline" href="mailto:hello@eternalheartmusic.com?subject=Press%20Inquiry">
+            Contact Press
+          </a>
+        </article>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .press-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+  .press-card { padding: 28px; }
+  .press-card h2 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .press-card p,
+  .press-card li {
+    color: var(--color-cream-dim);
+    line-height: 1.8;
+  }
+  .press-card ul { margin: 0; padding-left: 18px; }
+  .press-card a { color: var(--color-amber-light); text-decoration: none; }
+  .press-card .btn { margin-top: 12px; }
+  @media (max-width: 860px) {
+    .press-grid { grid-template-columns: 1fr; }
+  }
+</style>

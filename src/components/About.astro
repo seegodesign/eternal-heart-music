@@ -1,0 +1,166 @@
+---
+---
+
+<section class="section about" id="about">
+  <div class="container">
+    <div class="about__inner">
+
+      <!-- Portrait -->
+      <div class="about__visual reveal">
+        <div class="about__portrait">
+          <img src="/images/cameron-gaut-eternal-heart.avif" alt="Cameron Gaut — Eternal Heart" />
+        </div>
+        <div class="about__portrait-caption">
+          <span class="eyebrow" style="margin-bottom:0">Kauaʻi, Hawaiʻi</span>
+        </div>
+      </div>
+
+      <!-- Story -->
+      <div class="about__content reveal reveal-delay-2">
+        <span class="eyebrow">The Artist</span>
+        <h2 class="section-title">
+          Cameron Gaut<br /><em>Eternal Heart</em>
+        </h2>
+        <div class="divider"></div>
+
+        <div class="about__text">
+          <p>
+            I am a musician, sound therapist, and bansuri flute player living on the island
+            of Kauaʻi, Hawaiʻi — one of the most beautiful and inspiring places on Earth. The birds,
+            the rain, the ocean, the wind through bamboo. Everything here teaches you how to listen.
+          </p>
+          <p>
+            My music lives at the intersection of ambient sound, healing arts, and emotional
+            storytelling. I record in the forest, in my bedroom studio at night, and at the
+            water's edge — wherever the moment asks to be captured.
+          </p>
+          <p>
+            The bansuri — a bamboo flute from India — is at the heart of everything
+            I do. Its breath-like tone carries something ineffable: a quality that quiets the
+            mind and opens something deeper. I've spent years learning to let sound move
+            through me rather than performing it.
+          </p>
+          <p>
+            Eternal Heart is my offering to anyone who needs a moment of stillness in a
+            noisy world. Whether through a recording, a sound bath, or a custom piece of music,
+            the intention is always the same: to come back to yourself.
+          </p>
+        </div>
+
+        <div class="about__tags">
+          {
+            [
+              "Bansuri Flute",
+              "Ambient Music",
+              "Sound Healing",
+              "Music Producer",
+              "Kauaʻi, Hawaiʻi",
+              "Meditation Music",
+            ].map((tag) => (
+              <span class="about__tag">{tag}</span>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Layout ──────────────────────────────────────────────── */
+  .about {
+    position: relative;
+    background: linear-gradient(to bottom, var(--color-bg), var(--color-surface) 50%, var(--color-bg));
+  }
+  .about__inner {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  /* ── Portrait ─────────────────────────────────────────────── */
+  .about__visual {
+    position: sticky;
+    top: 120px;
+  }
+  .about__portrait {
+    aspect-ratio: 3 / 4;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    position: relative;
+  }
+  .about__portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  .about__portrait-placeholder {
+    position: absolute;
+    inset: 0;
+    background: var(--color-surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .about__portrait-orb {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(185, 115, 42, 0.25) 0%, rgba(40, 56, 36, 0.15) 50%, transparent 70%);
+    filter: blur(40px);
+    animation: about-breathe 8s ease-in-out infinite;
+  }
+  @keyframes about-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .about__portrait-caption {
+    margin-top: 14px;
+    padding-left: 2px;
+  }
+
+  /* ── Text content ─────────────────────────────────────────── */
+  .about__text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .about__text p {
+    font-size: 1.025rem;
+    line-height: 1.85;
+    color: var(--color-cream-dim);
+  }
+
+  /* ── Tags ─────────────────────────────────────────────────── */
+  .about__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .about__tag {
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-amber-light);
+    border: 1px solid rgba(200, 136, 58, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(200, 136, 58, 0.05);
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 940px) {
+    .about__inner { grid-template-columns: 1fr; gap: 48px; }
+    .about__visual { position: static; }
+    .about__portrait { max-width: 400px; aspect-ratio: 1; }
+  }
+</style>

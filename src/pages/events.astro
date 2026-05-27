@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const title = 'Events | Eternal Heart';
+const description =
+  'Upcoming sound baths, workshops, retreats, and immersive gatherings with Eternal Heart.';
+
+const upcoming = (await getCollection('events'))
+  .filter((entry) => !entry.data.isPast)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">Events & Experiences</span>
+        <h1 class="section-title">Gather, breathe, and <em>listen together</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">Join upcoming community events and immersive sound experiences.</p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container event-list">
+        {
+          upcoming.map((event) => (
+            <article class="card event-item">
+              <p class="event-date">{dateFormatter.format(event.data.date)}</p>
+              <h2>{event.data.title}</h2>
+              <p class="event-location">{event.data.location}</p>
+              <a class="btn btn--ghost" href={event.data.ctaUrl}>{event.data.ctaLabel}</a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .event-list { display: grid; gap: 18px; }
+  .event-item {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    align-items: center;
+    gap: 20px;
+  }
+  .event-date {
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-amber-light);
+  }
+  .event-item h2 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    margin: 0;
+  }
+  .event-location { color: var(--color-cream-dim); margin: 0; }
+  @media (max-width: 860px) {
+    .event-item {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

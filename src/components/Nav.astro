@@ -1,0 +1,283 @@
+---
+---
+
+<header id="site-nav" class="nav">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="Eternal Heart home">
+      <img src="/logomark.svg" alt="" class="nav__mark" width="18" height="18" aria-hidden="true" />
+      <span class="nav__wordmark">ETERNAL HEART</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary navigation">
+      <div class="nav__dropdown">
+        <a href="/music" class="nav__link nav__dropdown-trigger">Music</a>
+        <div class="nav__dropdown-menu">
+          <a href="/music" class="nav__dropdown-link">All Releases</a>
+          <a href="/custom-songs" class="nav__dropdown-link">Custom Songs</a>
+        </div>
+      </div>
+      <div class="nav__dropdown">
+        <a href="/sound-therapy" class="nav__link nav__dropdown-trigger">Sound Therapy</a>
+        <div class="nav__dropdown-menu">
+          <a href="/sound-therapy" class="nav__dropdown-link">Services</a>
+          <a href="/testimonials" class="nav__dropdown-link">Testimonials</a>
+          <a href="/faq" class="nav__dropdown-link">FAQ</a>
+        </div>
+      </div>
+      <a href="/events" class="nav__link">Events</a>
+      <div class="nav__dropdown">
+        <a href="/about" class="nav__link nav__dropdown-trigger">About</a>
+        <div class="nav__dropdown-menu">
+          <a href="/about" class="nav__dropdown-link">Artist Bio</a>
+          <a href="/press" class="nav__dropdown-link">Press & Media</a>
+          <a href="/contact" class="nav__dropdown-link">Contact</a>
+        </div>
+      </div>
+      <a href="/journal" class="nav__link">Journal</a>
+    </nav>
+
+    <div class="nav__right">
+      <a href="/contact" class="btn btn--outline nav__cta">Book Now</a>
+    </div>
+
+    <button class="nav__burger" id="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile overlay menu -->
+<div id="mobile-menu" class="mob-menu" aria-hidden="true">
+  <nav class="mob-menu__links" aria-label="Mobile navigation">
+    <a href="/music" class="mob-menu__link">Music</a>
+    <a href="/custom-songs" class="mob-menu__link">Custom Songs</a>
+    <a href="/sound-therapy" class="mob-menu__link">Sound Therapy</a>
+    <a href="/testimonials" class="mob-menu__link">Testimonials</a>
+    <a href="/faq" class="mob-menu__link">FAQ</a>
+    <a href="/events" class="mob-menu__link">Events</a>
+    <a href="/about" class="mob-menu__link">About</a>
+    <a href="/press" class="mob-menu__link">Press & Media</a>
+    <a href="/contact" class="mob-menu__link">Contact</a>
+    <a href="/journal" class="mob-menu__link">Journal</a>
+  </nav>
+  <a href="/contact" class="btn btn--primary mob-menu__cta">Book a Sound Journey</a>
+</div>
+
+<style>
+  /* ── Nav shell ─────────────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 200;
+    padding: 28px 0;
+    transition: background 0.45s ease, backdrop-filter 0.45s ease, padding 0.3s ease, border-color 0.45s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .nav--scrolled {
+    background: rgba(9, 8, 10, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 18px 0;
+    border-bottom-color: rgba(200, 136, 58, 0.08);
+  }
+
+  .nav__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .nav__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+  }
+  .nav__mark {
+    width: 18px;
+    height: 18px;
+    display: block;
+    opacity: 0.92;
+  }
+  .nav__wordmark {
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--color-cream);
+    white-space: nowrap;
+  }
+
+  /* ── Desktop links ─────────────────────────────────────────── */
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    margin-left: auto;
+  }
+  .nav__link {
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(232, 220, 200, 0.65);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav__link:hover {
+    color: var(--color-cream);
+  }
+  .nav__right { flex-shrink: 0; }
+  .nav__cta { font-size: 10.5px; padding: 10px 22px; }
+
+  /* ── Hamburger ─────────────────────────────────────────────── */
+  .nav__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: auto;
+  }
+  .nav__burger span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--color-cream);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ── Mobile menu ───────────────────────────────────────────── */
+  .mob-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    background: var(--color-bg);
+    padding: 100px 40px 60px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .mob-menu.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+  .mob-menu__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 40px;
+  }
+  .mob-menu__link {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--color-cream);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: color 0.2s ease;
+  }
+  .mob-menu__link:hover { color: var(--color-amber-light); }
+  .mob-menu__cta { align-self: flex-start; }
+
+  /* ── Dropdowns ───────────────────────────────────────────── */
+  .nav__dropdown {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nav__dropdown::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 10px;
+  }
+  .nav__dropdown-trigger {
+    cursor: pointer;
+  }
+  .nav__dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    z-index: 1000;
+    padding: 10px 0;
+    margin-top: 0;
+  }
+  .nav__dropdown:hover .nav__dropdown-menu,
+  .nav__dropdown:focus-within .nav__dropdown-menu {
+    display: block;
+  }
+  .nav__dropdown-link {
+    display: block;
+    width: 100%;
+    padding: 10px 22px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--color-cream-dim);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    transition: color 0.2s, background 0.2s;
+  }
+  .nav__dropdown-link:hover {
+    color: var(--color-amber);
+    background: var(--color-surface-2);
+  }
+
+  /* ── Responsive ────────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    .nav__links,
+    .nav__right { display: none; }
+    .nav__burger { display: flex; }
+  }
+</style>
+
+<script>
+  const burger = document.getElementById('nav-burger') as HTMLButtonElement | null;
+  const menu   = document.getElementById('mobile-menu');
+
+  function toggleMenu(force?: boolean) {
+    const open = force !== undefined ? force : !menu?.classList.contains('is-open');
+    burger?.setAttribute('aria-expanded', String(open));
+    menu?.setAttribute('aria-hidden', String(!open));
+    menu?.classList.toggle('is-open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  burger?.addEventListener('click', () => toggleMenu());
+
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => toggleMenu(false));
+  });
+</script>

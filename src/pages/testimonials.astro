@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const title = 'Testimonials | Eternal Heart';
+const description =
+  'Read testimonials from listeners, retreat hosts, and clients who have experienced Eternal Heart sessions and music.';
+
+const testimonials = (await getCollection('testimonials'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="page-main">
+    <section class="section section--sm page-hero">
+      <div class="container">
+        <span class="eyebrow">Testimonials</span>
+        <h1 class="section-title">What people are <em>feeling</em>.</h1>
+        <div class="divider"></div>
+        <p class="section-body">Reflections from listeners, guests, and collaborators.</p>
+      </div>
+    </section>
+
+    <section class="section page-section">
+      <div class="container test-grid">
+        {
+          testimonials.map((item) => (
+            <blockquote class="card test-card">
+              <p class="test-quote">“{item.data.quote}”</p>
+              <cite>{item.data.author}{item.data.location ? `, ${item.data.location}` : ''}</cite>
+            </blockquote>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-main { padding-top: 90px; }
+  .page-hero { padding-bottom: 44px; }
+  .page-section { padding-top: 40px; }
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .test-card {
+    margin: 0;
+    padding: 28px;
+    border-left: 2px solid var(--color-amber-dim);
+  }
+  .test-quote {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--color-cream);
+    margin-bottom: 14px;
+  }
+  .test-card cite {
+    color: var(--color-cream-muted);
+    font-style: normal;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 900px) {
+    .test-grid { grid-template-columns: 1fr; }
+  }
+</style>
