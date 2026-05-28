@@ -33,10 +33,9 @@ const offerings = [
           {
             offerings.map((o) => (
               <li class="custom__item">
-                <div>
-                  <strong class="custom__item-label"><span class="custom__infinity" aria-hidden="true">∞</span>{o.label}</strong>
-                  <p class="custom__item-desc">{o.desc}</p>
-                </div>
+                <span class="custom__infinity" aria-hidden="true">∞</span>
+                <strong class="custom__item-label">{o.label}</strong>
+                <p class="custom__item-desc">{o.desc}</p>
               </li>
             ))
           }
@@ -137,5 +136,29 @@ const offerings = [
   /* ── Responsive ───────────────────────────────────────────── */
   @media (max-width: 860px) {
     .custom__inner { grid-template-columns: 1fr; gap: 56px; }
+  }
+  @media (max-width: 560px) {
+    /* ── Mobile carousel ───────────────────────────────────────── */
+    .custom__list {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 16px;
+      margin-left: -32px;
+      margin-right: -32px;
+      padding-left: 32px;
+      padding-right: 32px;
+      scroll-padding-left: 32px;
+    }
+    .custom__list::-webkit-scrollbar { display: none; }
+    .custom__item {
+      flex: 0 0 80vw;
+      min-width: 0;
+      scroll-snap-align: start;
+    }
   }
 </style>
