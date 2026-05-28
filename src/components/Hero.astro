@@ -248,20 +248,27 @@
   }
 
   /* ── Mobile ───────────────────────────────────────────────── */
+  /* Hidden by default; on mobile becomes a fixed parallax layer
+     identical to the desktop video — same clip-path variables,
+     same JS scroll handler keeps it clipped to the hero bounds. */
   .hero__mobile-bg {
     display: none;
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    opacity: 0.45;
-    z-index: 0;
   }
   @media (max-width: 560px) {
     .hero__video { display: none; }
-    .hero__mobile-bg { display: block; }
+    .hero__mobile-bg {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.45;
+      z-index: 0;
+      clip-path: inset(var(--hero-video-clip-top, 0px) 0 var(--hero-video-clip-bottom, 0px) 0);
+    }
   }
   @media (max-width: 640px) {
     .hero__eyebrow { display: none; }

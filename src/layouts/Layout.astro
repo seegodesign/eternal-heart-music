@@ -86,7 +86,7 @@ const audioTracks = allAudioFiles.includes(preferred)
     <slot name="head" />
   </head>
   <body>
-    <PersistentPlayer tracks={audioTracks} client:only="react" transition:persist transition:name="persistent-player" />
+    <PersistentPlayer tracks={audioTracks} client:media="(min-width: 641px)" transition:persist transition:name="persistent-player" />
     <slot />
 
     <script>

@@ -53,10 +53,10 @@ const platforms = [
           <article class={`music-card card reveal reveal-delay-${i + 1}`}>
             <div class={`music-card__art music-card__art--${r.data.hue}`}>
               <img
-                src={r.data.artwork}
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                data-src={r.data.artwork}
                 alt={`${r.data.title} cover artwork`}
                 class="music-card__art-inner"
-                loading="lazy"
                 decoding="async"
               />
               <div class="music-card__meta">
@@ -390,3 +390,38 @@ const platforms = [
     }
   }
 </style>
+
+<script>
+  // Carousel-aware lazy loading:
+  // On mobile, use the scroll container as the IO root so images only load
+  // as the user swipes toward them. On desktop, use the viewport (normal lazy loading).
+  document.addEventListener('astro:page-load', () => {
+    const grid = document.querySelector('.music__grid');
+    if (!grid) return;
+
+    const isMobile = window.matchMedia('(max-width: 560px)').matches;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          io.unobserve(img);
+        });
+      },
+      {
+        root: isMobile ? grid : null,
+        // Mobile: pre-load 200px ahead of the visible card (right side = swipe direction)
+        // Desktop: pre-load 200px before section scrolls into view
+        rootMargin: isMobile ? '0px 200px 0px 0px' : '0px 0px 200px 0px',
+        threshold: 0,
+      }
+    );
+
+    grid.querySelectorAll('img[data-src]').forEach((img) => io.observe(img));
+  });
+</script>
