@@ -352,9 +352,36 @@ const platforms = [
     }
   }
   @media (max-width: 560px) {
+    /* ── Mobile carousel ──────────────────────────────────────── */
+    /* Break out of container's 32px side padding so cards can reach screen edges */
     .music__grid {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 16px;
+      margin-left: -32px;
+      margin-right: -32px;
+      padding-left: 32px;
+      /* Right padding lets the last card show breathing room when scrolled to */
+      padding-right: 32px;
+      /* Align snapped cards to the left of the container's content edge */
+      scroll-padding-left: 32px;
+      margin-bottom: 24px;
     }
+    .music__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Cards: 80vw each so ~20vw of the next card peeks on the right */
+    .music-card {
+      flex: 0 0 80vw;
+      min-width: 0;
+      scroll-snap-align: start;
+    }
+
     .music__platforms {
       flex-direction: column;
       align-items: center;

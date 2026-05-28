@@ -60,7 +60,7 @@ The music is always a conversation — with the room, with the people in it, and
 
 ## What the Flute Teaches
 
-In twenty years of practice, the bansuri has taught me more about listening than any other discipline. Not listening as a technical skill — not ear training or transcription — but listening as a way of being. The willingness to be still. The capacity to hear what is actually happening rather than what you are expecting to happen. The ability to follow a phrase to its natural end rather than forcing it toward a predetermined conclusion.
+In ten years of practice, the bansuri has taught me more about listening than any other discipline. Not listening as a technical skill — not ear training or transcription — but listening as a way of being. The willingness to be still. The capacity to hear what is actually happening rather than what you are expecting to happen. The ability to follow a phrase to its natural end rather than forcing it toward a predetermined conclusion.
 
 These qualities, I have come to believe, are not separate from the healing that the music facilitates. The same quality of listening that makes the music alive is the same quality that creates safety for the people receiving it. When a listener feels genuinely heard — not by words, but by the sound itself shifting in response to the atmosphere they carry — something in them releases.
 

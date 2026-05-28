@@ -112,7 +112,16 @@ const audioTracks = allAudioFiles.includes(preferred)
         );
 
         document.querySelectorAll('.reveal:not(.visible)').forEach((el) => {
-          revealObserver.observe(el);
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            // iOS Safari can delay IntersectionObserver callbacks for already-visible
+            // elements by many seconds. Bypass the observer for anything already on screen.
+            // Double-RAF lets the browser paint the initial opacity:0 state first so
+            // the CSS transition still plays.
+            requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+          } else {
+            revealObserver.observe(el);
+          }
         });
       }
 

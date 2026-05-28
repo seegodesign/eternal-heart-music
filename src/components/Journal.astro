@@ -216,6 +216,30 @@ const slugFromEntryId = (id: string) => id.replace(/\.md$/i, '');
     .journal__grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 560px) {
-    .journal__grid { grid-template-columns: 1fr; }
+    /* ── Mobile carousel ──────────────────────────────────────── */
+    .journal__grid {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 16px;
+      margin-left: -32px;
+      margin-right: -32px;
+      padding-left: 32px;
+      padding-right: 32px;
+      scroll-padding-left: 32px;
+      margin-bottom: 24px;
+    }
+    .journal__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .journal-card {
+      flex: 0 0 80vw;
+      min-width: 0;
+      scroll-snap-align: start;
+    }
   }
 </style>
