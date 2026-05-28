@@ -37,7 +37,7 @@
 
       <div class="signup__form">
         <iframe
-          src="https://links.seegodesign.com/widget/form/afdvGMV2bMug7FompVqL"
+          data-src="https://links.seegodesign.com/widget/form/afdvGMV2bMug7FompVqL"
           style="width:100%;height:440px;border:none;"
           id="inline-afdvGMV2bMug7FompVqL"
           data-layout="{'id':'INLINE'}"
@@ -53,7 +53,6 @@
           data-form-id="afdvGMV2bMug7FompVqL"
           title="Website Mailing List Signup"
         ></iframe>
-        <script src="https://links.seegodesign.com/js/form_embed.js"></script>
       </div>
     </div>
   </div>
@@ -172,4 +171,34 @@
   }
 </style>
 
+<script>
+  // Load the GHL iframe and its embed script only when the signup section
+  // is about to enter the viewport — saves loading ~300px of scroll distance worth
+  // of external scripts on initial page load.
+  document.addEventListener('astro:page-load', () => {
+    const section = document.getElementById('email-signup');
+    const iframe = section?.querySelector('iframe[data-src]');
+    if (!section || !iframe) return;
 
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+
+        // Activate the iframe
+        iframe.src = iframe.dataset.src;
+
+        // Load form_embed.js once (it may already be present from a prior navigation)
+        if (!document.querySelector('script[src*="form_embed"]')) {
+          const s = document.createElement('script');
+          s.src = 'https://links.seegodesign.com/js/form_embed.js';
+          document.body.appendChild(s);
+        }
+      },
+      // Pre-load 400px before the section reaches the viewport bottom
+      { rootMargin: '0px 0px 400px 0px' }
+    );
+
+    io.observe(section);
+  });
+</script>
