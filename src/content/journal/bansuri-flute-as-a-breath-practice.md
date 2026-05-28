@@ -1,6 +1,6 @@
 ---
-title: Bansuri Flute as a Breath Practice
-coverImage: /images/journal/bansuri-flute-as-a-breath-practice.jpg
+title: Flute as a Breath Practice
+coverImage: /images/journal/flute-as-a-breath-practice.avif
 excerpt: How flute phrasing can mirror and train a calmer, more coherent breath pattern.
 category: Bansuri
 date: 2025-12-01

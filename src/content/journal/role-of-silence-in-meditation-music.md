@@ -1,6 +1,6 @@
 ---
 title: The Role of Silence in Meditation Music
-coverImage: /images/journal/role-of-silence-in-meditation-music.jpg
+coverImage: /images/journal/role-of-silence-in-meditation-music.avif
 excerpt: Why spacing and stillness are as important as melody in deep-listening work.
 category: Meditation
 date: 2026-01-01

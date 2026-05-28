@@ -1,5 +1,5 @@
 ---
-title: "Private Sound Healing"
+title: "Private Music therapy"
 description: "One-on-one sessions tailored to your body, breath, and intentions. Bansuri flute, singing bowls, and ambient soundscapes woven into a deeply personal healing experience."
 icon: "/icons/sound-bowl.svg"
 category: "Individual"

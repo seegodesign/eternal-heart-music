@@ -10,7 +10,7 @@ const services = (await getCollection('soundTherapy'))
 
   <div class="container">
     <div class="therapy__header reveal">
-      <span class="eyebrow">Sound Healing</span>
+      <span class="eyebrow">Music therapy</span>
       <h2 class="section-title">
         Enter the <em>sanctuary</em><br />
         of sound.
@@ -84,7 +84,7 @@ const services = (await getCollection('soundTherapy'))
   .therapy__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    gap: 12px;
     margin-bottom: 80px;
   }
 
@@ -92,7 +92,7 @@ const services = (await getCollection('soundTherapy'))
   .therapy-card {
     padding: 40px 32px;
     border: 1px solid var(--color-border);
-    background: var(--color-surface);
+    background: rgba(17, 14, 11, 0.75);
     transition: background 0.35s ease, border-color 0.35s ease;
     position: relative;
   }
@@ -124,7 +124,7 @@ const services = (await getCollection('soundTherapy'))
   }
   .therapy-card__icon img {
     opacity: 0.95;
-    filter: brightness(0) invert(1);
+    filter: brightness(0) saturate(100%) invert(65%) sepia(50%) saturate(600%) hue-rotate(345deg) brightness(70%);
   }
 
   .therapy-card__title {
@@ -149,7 +149,7 @@ const services = (await getCollection('soundTherapy'))
     gap: 40px;
     flex-wrap: wrap;
     padding: 48px;
-    background: var(--color-surface);
+    background: rgba(17, 14, 11, 0.75);
     border: 1px solid var(--color-border);
     border-radius: 3px;
   }

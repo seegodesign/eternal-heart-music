@@ -24,40 +24,51 @@ const description =
     </section>
 
     <section class="section page-section">
-      <div class="container page-grid">
-        <article class="card page-card">
-          <h2>Artist Story</h2>
-          <p>
-            Cameron's path into healing music began with a deep curiosity about how sound
-            affects the nervous system, memory, and emotional processing. Over time, what
-            started as music production evolved into a practice of intentional listening.
-          </p>
-          <p>
-            Living in Kauaʻi shaped the project's sonic identity: ocean movement, dawn
-            birdsong, tropical rain, and quiet night recording sessions all became part of
-            the musical language.
-          </p>
-        </article>
+      <div class="container about-bio">
+        <div class="about-bio__image-wrap">
+          <img
+            src="/images/cameron-gaut-eternal-heart.avif"
+            alt="Cameron Gaut — Eternal Heart"
+            class="about-bio__image"
+            width="600"
+            height="750"
+          />
+        </div>
+        <div class="about-bio__text">
+          <article class="card page-card">
+            <h2>Artist Story</h2>
+            <p>
+              Cameron's path into healing music began with a deep curiosity about how sound
+              affects the nervous system, memory, and emotional processing. Over time, what
+              started as music production evolved into a practice of intentional listening.
+            </p>
+            <p>
+              Living in Kauaʻi shaped the project's sonic identity: ocean movement, dawn
+              birdsong, tropical rain, and quiet night recording sessions all became part of
+              the musical language.
+            </p>
+          </article>
 
-        <article class="card page-card">
-          <h2>Core Influences</h2>
-          <ul>
-            <li>Bansuri flute traditions and breath-led phrasing</li>
-            <li>Ambient and cinematic minimalism</li>
-            <li>Mindfulness and somatic healing arts</li>
-            <li>Nature field recordings and organic textures</li>
-          </ul>
-        </article>
+          <article class="card page-card">
+            <h2>Core Influences</h2>
+            <ul>
+              <li>Bansuri flute traditions and breath-led phrasing</li>
+              <li>Ambient and cinematic minimalism</li>
+              <li>Mindfulness and somatic healing arts</li>
+              <li>Nature field recordings and organic textures</li>
+            </ul>
+          </article>
 
-        <article class="card page-card">
-          <h2>Mission</h2>
-          <p>
-            To create music and experiences that support regulation, reflection, and inner
-            connection. Every release and session is designed to help listeners return to a
-            grounded, heart-centered state.
-          </p>
-          <a class="btn btn--primary" href="/contact">Work Together</a>
-        </article>
+          <article class="card page-card">
+            <h2>Mission</h2>
+            <p>
+              To create music and experiences that support regulation, reflection, and inner
+              connection. Every release and session is designed to help listeners return to a
+              grounded, heart-centered state.
+            </p>
+            <a class="btn btn--primary" href="/contact">Work Together</a>
+          </article>
+        </div>
       </div>
     </section>
   </main>
@@ -68,14 +79,36 @@ const description =
   .page-main { padding-top: 90px; }
   .page-hero { padding-bottom: 44px; }
   .page-section { padding-top: 40px; }
-  .page-grid {
+
+  .about-bio {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 420px 1fr;
+    gap: 52px;
+    align-items: start;
+  }
+  .about-bio__image-wrap {
+    position: sticky;
+    top: 110px;
+  }
+  .about-bio__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
+    filter: saturate(0.9);
+  }
+  .about-bio__text {
+    display: flex;
+    flex-direction: column;
     gap: 22px;
   }
+
   .page-card { padding: 30px; }
   .page-card h2 {
     font-family: var(--font-serif);
+    font-size: 1.5rem;
     font-weight: 500;
     margin-bottom: 12px;
   }
@@ -87,9 +120,16 @@ const description =
   .page-card ul {
     margin: 0;
     padding-left: 18px;
+    list-style-type: disc;
   }
   .page-card .btn { margin-top: 16px; }
+
   @media (max-width: 900px) {
-    .page-grid { grid-template-columns: 1fr; }
+    .about-bio {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .about-bio__image-wrap { position: static; }
+    .about-bio__image { max-width: 340px; }
   }
 </style>

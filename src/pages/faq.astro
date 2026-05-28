@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 
 const title = 'FAQ | Eternal Heart';
 const description =
-  'Frequently asked questions about sound healing sessions, custom songs, events, and music releases by Eternal Heart.';
+  'Frequently asked questions about music therapy sessions, custom songs, events, and music releases by Eternal Heart.';
 
 const faqs = (await getCollection('faq'))
   .filter((entry) => entry.data.active)

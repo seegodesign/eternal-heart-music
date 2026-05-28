@@ -1,5 +1,9 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import PersistentPlayer from '../components/AudioPlayer';
 
 interface Props {
   title?: string;
@@ -9,9 +13,21 @@ interface Props {
 
 const {
   title = 'Eternal Heart — Music for the Heart, Nervous System & Soul',
-  description = "Cameron Gaut creates ambient music, bansuri flute meditations, sound healing journeys, and immersive sonic experiences from the spirit of Kauaʻi.",
+  description = "Cameron Gaut creates ambient music, bansuri flute meditations, music therapy journeys, and immersive sonic experiences from the spirit of Kauaʻi.",
   image = '/og-image.jpg',
 } = Astro.props;
+
+const audioDir = join(process.cwd(), 'public', 'audio');
+const allowedExts = new Set(['.mp3', '.m4a', '.wav', '.ogg', '.aac', '.flac']);
+const allAudioFiles = readdirSync(audioDir, { withFileTypes: true })
+  .filter((e) => e.isFile())
+  .map((e) => e.name)
+  .filter((n) => { const d = n.lastIndexOf('.'); return d >= 0 && allowedExts.has(n.slice(d).toLowerCase()); })
+  .sort((a, b) => a.localeCompare(b));
+const preferred = 'radiance.mp3';
+const audioTracks = allAudioFiles.includes(preferred)
+  ? [`/audio/${preferred}`, ...allAudioFiles.filter((n) => n !== preferred).map((n) => `/audio/${n}`)]
+  : allAudioFiles.map((n) => `/audio/${n}`);
 ---
 
 <!doctype html>
@@ -37,37 +53,48 @@ const {
     />
 
     <title>{title}</title>
+    <ClientRouter />
   </head>
   <body>
+    <PersistentPlayer tracks={audioTracks} client:only="react" transition:persist transition:name="persistent-player" />
     <slot />
 
     <script>
-      // ── Scroll Reveal ──────────────────────────────────────
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              revealObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.08, rootMargin: '0px 0px -48px 0px' }
-      );
+      // ── Scroll Reveal — re-runs on every page navigation ──
+      function initReveal() {
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.08, rootMargin: '0px 0px -48px 0px' }
+        );
 
-      document.querySelectorAll('.reveal').forEach((el) => {
-        revealObserver.observe(el);
-      });
+        document.querySelectorAll('.reveal:not(.visible)').forEach((el) => {
+          revealObserver.observe(el);
+        });
+      }
 
       // ── Nav Scroll Behaviour ───────────────────────────────
-      const nav = document.getElementById('site-nav');
-      if (nav) {
+      function initNav() {
+        const nav = document.getElementById('site-nav');
+        if (!nav) return;
         const onScroll = () => {
           nav.classList.toggle('nav--scrolled', window.scrollY > 64);
         };
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
       }
+
+      // astro:page-load fires after every navigation (and on initial load)
+      document.addEventListener('astro:page-load', () => {
+        initReveal();
+        initNav();
+      });
     </script>
   </body>
 </html>

@@ -1,8 +1,8 @@
 ---
 title: How Sound Supports Nervous System Regulation
-coverImage: /images/journal/how-sound-supports-nervous-system-regulation.jpg
+coverImage: /images/journal/how-sound-supports-nervous-system.avif
 excerpt: A practical look at rhythm, resonance, and how the body responds to intentional sound.
-category: Sound Healing
+category: Music therapy
 date: 2026-02-01
 readTime: 7 min read
 gradient: amber

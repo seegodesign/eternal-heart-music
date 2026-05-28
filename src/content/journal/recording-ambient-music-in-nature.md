@@ -1,6 +1,6 @@
 ---
 title: Recording Ambient Music in Nature
-coverImage: /images/journal/recording-ambient-music-in-nature.jpg
+coverImage: /images/journal/recording-ambient-music-in-nature.avif
 excerpt: Field recording techniques and the creative decisions behind organic sound design.
 category: Process
 date: 2025-11-01

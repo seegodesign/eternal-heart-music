@@ -1,26 +1,5 @@
 ---
-import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
-
-const audioDir = join(process.cwd(), 'public', 'audio');
-const allowedAudioExtensions = new Set(['.mp3', '.m4a', '.wav', '.ogg', '.aac', '.flac']);
-
-const allAudioFiles = readdirSync(audioDir, { withFileTypes: true })
-  .filter((entry) => entry.isFile())
-  .map((entry) => entry.name)
-  .filter((fileName) => {
-    const dotIndex = fileName.lastIndexOf('.');
-    if (dotIndex < 0) return false;
-    return allowedAudioExtensions.has(fileName.slice(dotIndex).toLowerCase());
-  })
-  .sort((a, b) => a.localeCompare(b));
-
-const preferredFirstTrack = 'radiance.mp3';
-const audioTracks = allAudioFiles.includes(preferredFirstTrack)
-  ? [`/audio/${preferredFirstTrack}`, ...allAudioFiles.filter((name) => name !== preferredFirstTrack).map((name) => `/audio/${name}`)]
-  : allAudioFiles.map((name) => `/audio/${name}`);
 ---
-
 <section class="hero" id="hero" aria-label="Eternal Heart — Hero">
   <!-- ── Atmospheric background ─────────────────────────────── -->
   <div class="hero__bg">
@@ -43,7 +22,7 @@ const audioTracks = allAudioFiles.includes(preferredFirstTrack)
 
   <!-- ── Content ────────────────────────────────────────────── -->
   <div class="hero__content">
-    <p class="hero__eyebrow reveal">YOGA • MEDITATION • SOUND HEALING • RELAXATION • WELLNESS</p>
+    <p class="hero__eyebrow reveal">YOGA • MEDITATION • MUSIC THERAPY • RELAXATION • WELLNESS</p>
 
     <h1 class="hero__headline reveal reveal-delay-1">
       Music for the<br />
@@ -62,28 +41,6 @@ const audioTracks = allAudioFiles.includes(preferredFirstTrack)
     </div>
   </div>
 
-  <audio id="hero-audio" src={audioTracks[0] ?? '/audio/radiance.mp3'} autoplay preload="metadata" playsinline></audio>
-  <div class="hero__player-layer" aria-hidden="false">
-    <div class="hero-player-wrap">
-      <p id="hero-track-title" class="hero-player-title" aria-live="polite">Now playing: Radiance</p>
-      <div class="hero-player-controls">
-      <button id="hero-audio-prev" class="hero-player-side" type="button" aria-label="Previous track">
-        <span aria-hidden="true">⏮</span>
-      </button>
-      <button id="hero-audio-toggle" class="hero-player-toggle" type="button" aria-label="Pause ambient track">
-        <span id="hero-audio-icon" aria-hidden="true">❚❚</span>
-      </button>
-      <button id="hero-audio-next" class="hero-player-side" type="button" aria-label="Next track">
-        <span aria-hidden="true">⏭</span>
-      </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Scroll indicator ───────────────────────────────────── -->
-  <div class="hero__scroll" aria-hidden="true">
-    <div class="hero__scroll-line"></div>
-  </div>
 </section>
 
 <style>
@@ -278,7 +235,6 @@ const audioTracks = allAudioFiles.includes(preferredFirstTrack)
     flex-wrap: wrap;
   }
 
-  /* ── Scroll indicator ─────────────────────────────────────── */
   .hero__scroll {
     position: absolute;
     bottom: 44px;
@@ -288,104 +244,6 @@ const audioTracks = allAudioFiles.includes(preferredFirstTrack)
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  .hero__player-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 210;
-    pointer-events: none;
-  }
-
-  .hero-player-toggle {
-    pointer-events: auto;
-    width: 52px;
-    height: 52px;
-    border-radius: 999px;
-    border: 1px solid rgba(200, 136, 58, 0.42);
-    background: rgba(9, 8, 10, 0.78);
-    color: var(--color-cream);
-    font-size: 18px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
-  }
-
-  .hero-player-wrap {
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 7px;
-    pointer-events: none;
-  }
-
-  .hero-player-title {
-    margin: 0;
-    max-width: 220px;
-    text-align: right;
-    color: rgba(232, 220, 200, 0.78);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
-  }
-
-  .hero-player-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    pointer-events: none;
-  }
-
-  .hero-player-side {
-    pointer-events: auto;
-    width: 40px;
-    height: 40px;
-    border-radius: 999px;
-    border: 1px solid rgba(200, 136, 58, 0.34);
-    background: rgba(9, 8, 10, 0.74);
-    color: var(--color-cream);
-    font-size: 14px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34);
-  }
-
-  .hero-player-side:hover {
-    border-color: var(--color-amber);
-    background: rgba(200, 136, 58, 0.16);
-    transform: translateY(-1px);
-  }
-
-  .hero-player-toggle:hover {
-    border-color: var(--color-amber);
-    background: rgba(200, 136, 58, 0.18);
-    transform: translateY(-1px);
-  }
-  .hero__scroll-line {
-    width: 1px;
-    height: 64px;
-    background: linear-gradient(to bottom, var(--color-amber), transparent);
-    animation: scroll-pulse 2.4s ease-in-out infinite;
-    transform-origin: top;
   }
   @keyframes scroll-pulse {
     0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
@@ -401,45 +259,17 @@ const audioTracks = allAudioFiles.includes(preferredFirstTrack)
       width: min(110vw, 640px);
       opacity: 0.2;
     }
-    .hero-player-wrap {
-      right: 12px;
-      bottom: max(12px, env(safe-area-inset-bottom));
-    }
-    .hero-player-controls {
-      gap: 8px;
-    }
-    .hero-player-title {
-      max-width: 176px;
-      font-size: 9px;
-    }
-    .hero-player-toggle {
-      width: 48px;
-      height: 48px;
-    }
-    .hero-player-side {
-      width: 38px;
-      height: 38px;
-    }
   }
 </style>
 
-<script define:vars={{ audioTracks }}>
-  const audio = document.getElementById('hero-audio');
-  const toggleBtn = document.getElementById('hero-audio-toggle');
-  const prevBtn = document.getElementById('hero-audio-prev');
-  const nextBtn = document.getElementById('hero-audio-next');
-  const icon = document.getElementById('hero-audio-icon');
-  const trackTitleEl = document.getElementById('hero-track-title');
-  const tracks = Array.isArray(audioTracks) ? audioTracks : [];
-  let currentTrackIndex = 0;
-  const heroSection = document.getElementById('hero');
-
+<script>
+  // Re-query #hero each call so stale references after ClientRouter swaps don't break clipping
   function updateHeroVideoClip() {
+    const heroSection = document.getElementById('hero');
     if (!heroSection) return;
     const rect = heroSection.getBoundingClientRect();
     const clipTop = Math.max(0, rect.top);
     const clipBottom = Math.max(0, window.innerHeight - rect.bottom);
-
     heroSection.style.setProperty('--hero-video-clip-top', `${clipTop}px`);
     heroSection.style.setProperty('--hero-video-clip-bottom', `${clipBottom}px`);
   }
@@ -453,102 +283,8 @@ const audioTracks = allAudioFiles.includes(preferredFirstTrack)
     });
   }
 
-  function normalizePath(urlLike) {
-    try {
-      return new URL(urlLike, window.location.origin).pathname;
-    } catch {
-      return urlLike;
-    }
-  }
-
-  function detectInitialTrack() {
-    if (!audio || tracks.length === 0) return;
-    const currentPath = normalizePath(audio.currentSrc || audio.src);
-    const foundIndex = tracks.findIndex((track) => normalizePath(track) === currentPath);
-    currentTrackIndex = foundIndex >= 0 ? foundIndex : 0;
-  }
-
-  async function setTrack(nextIndex) {
-    if (!audio || tracks.length === 0) return;
-    const bounded = (nextIndex + tracks.length) % tracks.length;
-    currentTrackIndex = bounded;
-
-    const shouldPlay = !audio.paused;
-    audio.src = tracks[currentTrackIndex];
-    audio.load();
-
-    if (shouldPlay) {
-      try {
-        await audio.play();
-      } catch {}
-    }
-
-    syncUi();
-  }
-
-  function trackTitleFromPath(path) {
-    const fileName = path.split('/').pop() ?? 'track';
-    const withoutExtension = fileName.replace(/\.[^/.]+$/, '');
-    const cleaned = withoutExtension.replace(/[-_]+/g, ' ').trim();
-    return cleaned.replace(/\b\w/g, (letter) => letter.toUpperCase());
-  }
-
-  function syncUi() {
-    if (!audio || !toggleBtn || !icon) return;
-    icon.textContent = audio.paused ? '▶' : '❚❚';
-    toggleBtn.setAttribute('aria-label', audio.paused ? 'Play ambient track' : 'Pause ambient track');
-
-    if (trackTitleEl && tracks.length > 0) {
-      const trackPath = tracks[currentTrackIndex] ?? normalizePath(audio.currentSrc || audio.src);
-      trackTitleEl.textContent = `Now playing: ${trackTitleFromPath(trackPath)}`;
-    }
-  }
-
-  async function attemptAutoplay() {
-    if (!audio) return;
-    audio.volume = 0.75;
-
-    // Start each page load from a random track.
-    if (tracks.length > 0) {
-      currentTrackIndex = Math.floor(Math.random() * tracks.length);
-      audio.src = tracks[currentTrackIndex];
-      audio.load();
-    } else {
-      detectInitialTrack();
-    }
-
-    try {
-      await audio.play();
-    } catch {}
-    syncUi();
-  }
-
-  toggleBtn?.addEventListener('click', async () => {
-    if (!audio) return;
-    if (audio.paused) {
-      await audio.play();
-    } else {
-      audio.pause();
-    }
-    syncUi();
-  });
-
-  prevBtn?.addEventListener('click', async () => {
-    await setTrack(currentTrackIndex - 1);
-  });
-
-  nextBtn?.addEventListener('click', async () => {
-    await setTrack(currentTrackIndex + 1);
-  });
-
-  audio?.addEventListener('play', syncUi);
-  audio?.addEventListener('pause', syncUi);
-  audio?.addEventListener('ended', async () => {
-    await setTrack(currentTrackIndex + 1);
-  });
-
-  attemptAutoplay();
-  queueHeroVideoClipUpdate();
+  // Re-run on every navigation so the fresh #hero element gets its clip-path initialised
+  document.addEventListener('astro:page-load', queueHeroVideoClipUpdate);
   window.addEventListener('scroll', queueHeroVideoClipUpdate, { passive: true });
   window.addEventListener('resize', queueHeroVideoClipUpdate);
 </script>

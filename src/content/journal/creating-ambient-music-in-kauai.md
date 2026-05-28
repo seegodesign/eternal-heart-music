@@ -1,6 +1,6 @@
 ---
 title: Creating Ambient Music in the Heart of Kauai
-coverImage: /images/journal/creating-ambient-music-in-kauai.jpg
+coverImage: /images/journal/creating-ambient-music-in-kauai.avif
 excerpt: I don't try to capture nature - I try to let nature play through me. These are some notes from a morning recording session at the shoreline.
 category: Process
 date: 2026-03-01

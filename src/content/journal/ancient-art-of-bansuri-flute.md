@@ -1,6 +1,6 @@
 ---
 title: The Ancient Art of Bansuri Flute
-coverImage: /images/journal/ancient-art-of-bansuri-flute.jpg
+coverImage: /images/journal/ancient-art-of-bansuri-flute.avif
 excerpt: The bansuri is one of the oldest wind instruments in the world. Its breathlike tone holds a quality that Western instruments rarely carry - a living, organic quality.
 category: Bansuri
 date: 2026-04-01
