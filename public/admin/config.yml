@@ -138,9 +138,9 @@ collections:
       - { label: Sort Order, name: sortOrder, widget: number, value_type: int, default: 100 }
 
   - name: soundTherapy
-    label: Sound Therapy Services
-    label_singular: Sound Therapy Service
-    folder: /src/content/sound-therapy
+    label: Music Therapy Services
+    label_singular: Music Therapy Service
+    folder: /src/content/music-therapy
     create: true
     extension: md
     format: frontmatter

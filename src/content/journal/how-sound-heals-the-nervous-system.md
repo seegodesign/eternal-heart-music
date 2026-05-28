@@ -36,7 +36,7 @@ This is part of why live sound experiences feel different from recorded music. T
 
 ## Breath Entrainment and the Rhythm of Safety
 
-One of the most measurable effects of sound therapy is its influence on breath. When we are stressed, our breathing tends to be shallow, fast, and thoracic — high in the chest. When we are safe and relaxed, breath drops into the belly and slows naturally.
+One of the most measurable effects of music therapy is its influence on breath. When we are stressed, our breathing tends to be shallow, fast, and thoracic — high in the chest. When we are safe and relaxed, breath drops into the belly and slows naturally.
 
 Sustained musical tones, particularly those played at a slow melodic pace, tend to entrain the listener's breath to the rhythm of the phrase. Listeners begin unconsciously matching their inhalation to the rise of a melody and their exhalation to its fall. Over the course of a session, this gentle entrainment can shift the breath rate from fifteen or twenty cycles per minute down to six or eight — a range associated with heightened heart rate variability (HRV) and deep parasympathetic activation.
 
