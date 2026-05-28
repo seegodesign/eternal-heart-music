@@ -17,28 +17,15 @@ export default function PersistentPlayer({ tracks = [] }) {
   const [title, setTitle] = useState('');
 
   // On mount only — component persists across navigations via transition:persist
+  // Only pick a track and display the title; do NOT set src or load audio.
+  // Audio is fetched only when the user clicks play.
   useEffect(() => {
     if (!tracks.length || !audioRef.current) return;
-    // Don't load the player on mobile
     if (window.matchMedia('(max-width: 640px)').matches) return;
     const idx = Math.floor(Math.random() * tracks.length);
     indexRef.current = idx;
     setTitle(titleFromPath(tracks[idx]));
-    audioRef.current.src = tracks[idx];
     audioRef.current.volume = 0.75;
-    audioRef.current.load();
-
-    audioRef.current.play()
-      .then(() => setIsPlaying(true))
-      .catch(() => {
-        // Autoplay blocked — start on first user interaction
-        const events = ['click', 'keydown', 'touchstart'];
-        const startOnInteraction = () => {
-          audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => {});
-          events.forEach((e) => document.removeEventListener(e, startOnInteraction));
-        };
-        events.forEach((e) => document.addEventListener(e, startOnInteraction, { once: true }));
-      });
   }, []);
 
   const goToTrack = useCallback(async (nextIdx) => {
@@ -56,13 +43,18 @@ export default function PersistentPlayer({ tracks = [] }) {
 
   const togglePlay = useCallback(async () => {
     if (!audioRef.current) return;
+    // First click: src has not been set yet — load the track now
+    if (!audioRef.current.src || audioRef.current.src === window.location.href) {
+      audioRef.current.src = tracks[indexRef.current];
+      audioRef.current.load();
+    }
     if (audioRef.current.paused) {
       try { await audioRef.current.play(); setIsPlaying(true); } catch {}
     } else {
       audioRef.current.pause();
       setIsPlaying(false);
     }
-  }, []);
+  }, [tracks]);
 
   return (
     <div className="hero__player-layer">
@@ -99,7 +91,7 @@ export default function PersistentPlayer({ tracks = [] }) {
       </div>
       <audio
         ref={audioRef}
-        preload="metadata"
+        preload="none"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={() => goToTrack(indexRef.current + 1)}
