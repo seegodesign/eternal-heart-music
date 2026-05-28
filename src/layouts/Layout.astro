@@ -17,6 +17,10 @@ const {
   image = '/og-image.jpg',
 } = Astro.props;
 
+const siteUrl = 'https://eternalheartmusic.com';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = new URL(image, siteUrl).href;
+
 const audioDir = join(process.cwd(), 'public', 'audio');
 const allowedExts = new Set(['.mp3', '.m4a', '.wav', '.ogg', '.aac', '.flac']);
 const allAudioFiles = readdirSync(audioDir, { withFileTypes: true })
@@ -35,12 +39,25 @@ const audioTracks = allAudioFiles.includes(preferred)
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Eternal Heart" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={`${title} — Eternal Heart`} />
     <meta property="og:type" content="website" />
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={`${title} — Eternal Heart`} />
+
     <link rel="icon" type="image/svg+xml" href="/logomark.svg" />
     <meta name="generator" content={Astro.generator} />
 
@@ -53,7 +70,27 @@ const audioTracks = allAudioFiles.includes(preferred)
     />
 
     <title>{title}</title>
+
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "MusicGroup",
+      "name": "Eternal Heart",
+      "alternateName": "Cameron Gaut",
+      "url": siteUrl,
+      "image": ogImage,
+      "description": "Cameron Gaut creates ambient music, bansuri flute meditations, music therapy journeys, and immersive sonic experiences from the spirit of Kauaʻi.",
+      "genre": ["Ambient", "World Music", "Meditation", "New Age"],
+      "sameAs": [
+        "https://open.spotify.com/artist/5hJwEvmHfjZ48gTq6BAt3x",
+        "https://music.apple.com/us/artist/eternal-heart/308361271",
+        "https://www.youtube.com/@eternal-heart-music",
+        "https://instagram.com/eternal.heart.music"
+      ]
+    })} />
+
     <ClientRouter />
+    <slot name="head" />
   </head>
   <body>
     <PersistentPlayer tracks={audioTracks} client:only="react" transition:persist transition:name="persistent-player" />

@@ -23,6 +23,27 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
 
 const title = `${post.data.title} | Eternal Heart Journal`;
 const description = post.data.excerpt;
+const siteUrl = 'https://eternalheartmusic.com';
+const canonicalURL = `${siteUrl}/journal/${post.id.replace(/\.md$/i, '')}`;
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.data.title,
+  "description": post.data.excerpt,
+  "datePublished": post.data.date.toISOString(),
+  "url": canonicalURL,
+  "image": post.data.coverImage?.startsWith('http') ? post.data.coverImage : `${siteUrl}${post.data.coverImage}`,
+  "author": {
+    "@type": "Person",
+    "name": "Cameron Gaut",
+    "url": siteUrl
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Eternal Heart",
+    "url": siteUrl
+  }
+};
 const relatedPosts = (await getCollection('journal'))
   .filter((item) => item.id !== post.id)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -30,6 +51,9 @@ const relatedPosts = (await getCollection('journal'))
 ---
 
 <Layout title={title} description={description}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  </Fragment>
   <Nav />
   <main class="article-main">
     <section class="section section--sm article-hero">
