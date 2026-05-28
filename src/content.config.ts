@@ -67,7 +67,7 @@ const testimonials = defineCollection({
 });
 
 const soundTherapy = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/music-therapy' }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/sound-therapy' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

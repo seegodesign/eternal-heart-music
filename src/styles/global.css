@@ -1,3 +1,16 @@
+/* ─── Self-hosted fonts (no external requests) ─────────────── */
+/* Cormorant Garamond — normal */
+@import '@fontsource/cormorant-garamond/300.css';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600.css';
+/* Cormorant Garamond — italic */
+@import '@fontsource/cormorant-garamond/300-italic.css';
+@import '@fontsource/cormorant-garamond/400-italic.css';
+@import '@fontsource/cormorant-garamond/500-italic.css';
+/* DM Sans variable (covers all weights + optical size) */
+@import '@fontsource-variable/dm-sans';
+
 @import "tailwindcss";
 
 /* ─── Design Tokens ─────────────────────────────────────────── */
@@ -6,7 +19,7 @@
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
 
   --color-bg:          #191616;
-  --color-surface:     #15100b;
+  --color-surface:     #120f0b;
   --color-surface-2:   #1a1612;
   --color-border:      rgba(200, 136, 58, 0.1);
   --color-border-hi:   rgba(200, 136, 58, 0.28);

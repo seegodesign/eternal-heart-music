@@ -7,13 +7,17 @@
     <div class="orb orb--sage"></div>
     <div class="orb orb--warm"></div>
 
-    <!-- <div class="hero__mark-wrap" aria-hidden="true">
-      <img src="/logomark.svg" alt="" class="hero__mark" width="820" height="637" />
-    </div> -->
-
     <video class="hero__video" autoplay muted loop playsinline>
-      <source src="/video/hero.webm" type="video/webm" />
+      <source src="/video/hero.webm" type="video/webm" media="(min-width: 561px)" />
     </video>
+
+    <img
+      class="hero__mobile-bg"
+      src="/images/hero.avif"
+      alt=""
+      aria-hidden="true"
+      fetchpriority="high"
+    />
 
     <div class="hero__overlay"></div>
     <div class="hero__grain"></div>
@@ -22,20 +26,20 @@
 
   <!-- ── Content ────────────────────────────────────────────── -->
   <div class="hero__content">
-    <p class="hero__eyebrow reveal">YOGA • MEDITATION • MUSIC THERAPY • RELAXATION • WELLNESS</p>
+    <p class="hero__eyebrow">YOGA • MEDITATION • MUSIC THERAPY • RELAXATION • WELLNESS</p>
 
-    <h1 class="hero__headline reveal reveal-delay-1">
+    <h1 class="hero__headline">
       Music for the<br />
       <em>heart, nervous system,</em><br />
       and soul.
     </h1>
 
-    <p class="hero__sub reveal reveal-delay-2">
+    <p class="hero__sub">
       Welcome to the home of Eternal Heart: music, bansuri flute, sound journeys,<br class="hero__br" />
       and healing experiences born from the spirit of Kauaʻi.
     </p>
 
-    <button class="hero__scroll-cta reveal reveal-delay-3" aria-label="Scroll down" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
+    <button class="hero__scroll-cta" aria-label="Scroll down" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
   </div>
@@ -121,37 +125,6 @@
     clip-path: inset(var(--hero-video-clip-top, 0px) 0 var(--hero-video-clip-bottom, 0px) 0);
   }
 
-  .hero__mark-wrap {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .hero__mark {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: min(74vw, 920px);
-    height: auto;
-    opacity: 0.1;
-    filter: saturate(0.95) drop-shadow(0 0 36px rgba(200, 136, 58, 0.14));
-    transform: translate(-50%, -50%) scale(1.02);
-    animation: mark-float 12s ease-in-out infinite;
-    transform-origin: center;
-  }
-
-  @keyframes mark-float {
-    0%, 100% {
-      transform: translate(-50%, -50%) scale(1.02) rotate(0deg);
-      opacity: 0.2;
-    }
-    50% {
-      transform: translate(-50%, calc(-50% - 12px)) scale(1.08) rotate(1.2deg);
-      opacity: 0.3;
-    }
-  }
-
   /* Multi-layer dark overlay for cinematic feel */
   .hero__overlay {
     position: absolute;
@@ -194,6 +167,16 @@
     max-width: 860px;
   }
 
+  /* ── Hero entrance animations (CSS-only, no JS dependency) ── */
+  @keyframes hero-fade-up {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes chevron-bob {
+    0%, 100% { transform: translateY(0); opacity: 0.45; }
+    50%       { transform: translateY(7px); opacity: 0.9; }
+  }
+
   .hero__eyebrow {
     font-family: var(--font-sans);
     font-size: 10.5px;
@@ -202,6 +185,7 @@
     text-transform: uppercase;
     color: var(--color-amber);
     margin-bottom: 30px;
+    animation: hero-fade-up 0.9s ease both;
   }
 
   .hero__headline {
@@ -212,6 +196,7 @@
     color: var(--color-cream);
     letter-spacing: -0.025em;
     margin-bottom: 32px;
+    animation: hero-fade-up 0.9s ease 0.1s both;
   }
   .hero__headline em {
     font-style: italic;
@@ -225,6 +210,7 @@
     color: rgba(232, 220, 200, 0.62);
     line-height: 1.85;
     margin-bottom: 56px;
+    animation: hero-fade-up 0.9s ease 0.22s both;
   }
 
   .hero__scroll-cta {
@@ -237,15 +223,12 @@
     color: rgba(232, 220, 200, 0.45);
     cursor: pointer;
     padding: 8px;
-    animation: chevron-bob 2.2s ease-in-out infinite;
+    /* Fade up first, then start the bobbing loop */
+    animation: hero-fade-up 0.9s ease 0.34s both, chevron-bob 2.2s ease-in-out 1.24s infinite;
     transition: color 0.2s ease;
   }
   .hero__scroll-cta:hover {
     color: rgba(232, 220, 200, 0.85);
-  }
-  @keyframes chevron-bob {
-    0%, 100% { transform: translateY(0); opacity: 0.45; }
-    50%       { transform: translateY(7px); opacity: 0.9; }
   }
 
   .hero__scroll {
@@ -265,13 +248,24 @@
   }
 
   /* ── Mobile ───────────────────────────────────────────────── */
+  .hero__mobile-bg {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.45;
+    z-index: 0;
+  }
+  @media (max-width: 560px) {
+    .hero__video { display: none; }
+    .hero__mobile-bg { display: block; }
+  }
   @media (max-width: 640px) {
     .hero__eyebrow { display: none; }
     .hero__br { display: none; }
-    .hero__mark {
-      width: min(110vw, 640px);
-      opacity: 0.2;
-    }
   }
 </style>
 

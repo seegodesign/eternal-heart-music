@@ -209,7 +209,7 @@ const slugFromEntryId = (id: string) => id.replace(/\.md$/i, '');
   .journal-card__link:hover { color: var(--color-amber-light); }
 
   /* ── More button ──────────────────────────────────────────── */
-  .journal__more { display: flex; }
+  .journal__more { display: flex; justify-content: center; }
 
   /* ── Responsive ───────────────────────────────────────────── */
   @media (max-width: 900px) {
@@ -221,6 +221,7 @@ const slugFromEntryId = (id: string) => id.replace(/\.md$/i, '');
       display: flex;
       flex-wrap: nowrap;
       overflow-x: auto;
+      overflow-y: hidden;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;

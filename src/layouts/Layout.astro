@@ -61,13 +61,6 @@ const audioTracks = allAudioFiles.includes(preferred)
     <link rel="icon" type="image/svg+xml" href="/logomark.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Preconnect to Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
-      rel="stylesheet"
-    />
 
     <title>{title}</title>
 
@@ -123,6 +116,19 @@ const audioTracks = allAudioFiles.includes(preferred)
             revealObserver.observe(el);
           }
         });
+
+        // Hard fallback: on iOS, getBoundingClientRect() can return zeros if layout
+        // hasn't completed when astro:page-load fires, causing elements to miss both
+        // paths above. After 500ms layout is always done — reveal anything still hidden
+        // that is now in the viewport.
+        setTimeout(() => {
+          document.querySelectorAll('.reveal:not(.visible)').forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+              el.classList.add('visible');
+            }
+          });
+        }, 500);
       }
 
       // ── Nav Scroll Behaviour ───────────────────────────────
