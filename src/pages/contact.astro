@@ -24,17 +24,26 @@ const description =
 
     <section class="section page-section">
       <div class="container contact-grid">
-        <article class="card contact-card">
-          <h2>General Inquiries</h2>
-          <p>Email: <a href="mailto:hello@eternalheartmusic.com">hello@eternalheartmusic.com</a></p>
-        </article>
-        <article class="card contact-card">
-          <h2>Bookings</h2>
-          <p>Sound baths, retreats, workshops, and private healing sessions.</p>
-          <a class="btn btn--primary" href="mailto:hello@eternalheartmusic.com?subject=Booking%20Inquiry">
-            Request Booking
-          </a>
-        </article>
+        <div class="contact-form-col">
+          <iframe
+            src="https://links.seegodesign.com/widget/form/eVfODdwvrOgTCpFvpUoD"
+            style="width:100%;height:460px;border:none;border-radius:4px"
+            id="inline-eVfODdwvrOgTCpFvpUoD"
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="Contact Us"
+            data-height="460"
+            data-layout-iframe-id="inline-eVfODdwvrOgTCpFvpUoD"
+            data-form-id="eVfODdwvrOgTCpFvpUoD"
+            title="Contact Us"
+          ></iframe>
+          <script src="https://links.seegodesign.com/js/form_embed.js"></script>
+        </div>
         <article class="card contact-card">
           <h2>Follow & Listen</h2>
           <ul>
@@ -56,8 +65,12 @@ const description =
   .page-section { padding-top: 40px; }
   .contact-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 2fr 1fr;
     gap: 22px;
+    align-items: start;
+  }
+  .contact-form-col {
+    overflow: hidden;
   }
   .contact-card { padding: 28px; }
   .contact-card h2 {
@@ -78,7 +91,7 @@ const description =
     margin-top: 12px;
     color: white;
   }
-  @media (max-width: 900px) {
+  @media (max-width: 700px) {
     .contact-grid { grid-template-columns: 1fr; }
   }
 </style>
