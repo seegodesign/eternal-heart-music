@@ -53,7 +53,7 @@
     <a href="/music" class="mob-menu__link">Music</a>
     <a href="/custom-songs" class="mob-menu__link">Custom Songs</a>
     <a href="/sound-therapy" class="mob-menu__link">Sound Therapy</a>
-    <a href="/testimonials" class="mob-menu__link">Testimonials</a>
+    <!-- <a href="/testimonials" class="mob-menu__link">Testimonials</a> -->
     <a href="/faq" class="mob-menu__link">FAQ</a>
     <!-- <a href="/events" class="mob-menu__link">Events</a> -->
     <!-- <a href="/about" class="mob-menu__link">About</a> -->
@@ -259,20 +259,30 @@
 </style>
 
 <script>
-  const burger = document.getElementById('nav-burger') as HTMLButtonElement | null;
-  const menu   = document.getElementById('mobile-menu');
+  function initNav() {
+    const burger = document.getElementById('nav-burger') as HTMLButtonElement | null;
+    const menu   = document.getElementById('mobile-menu');
+    if (!burger || !menu) return;
 
-  function toggleMenu(force?: boolean) {
-    const open = force !== undefined ? force : !menu?.classList.contains('is-open');
-    burger?.setAttribute('aria-expanded', String(open));
-    menu?.setAttribute('aria-hidden', String(!open));
-    menu?.classList.toggle('is-open', open);
-    document.body.style.overflow = open ? 'hidden' : '';
+    function toggleMenu(force?: boolean) {
+      const open = force !== undefined ? force : !menu!.classList.contains('is-open');
+      burger!.setAttribute('aria-expanded', String(open));
+      menu!.setAttribute('aria-hidden', String(!open));
+      menu!.classList.toggle('is-open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    burger.addEventListener('click', () => toggleMenu());
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => toggleMenu(false));
+    });
   }
 
-  burger?.addEventListener('click', () => toggleMenu());
-
-  menu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => toggleMenu(false));
+  // Close menu and restore scroll before each page swap
+  document.addEventListener('astro:before-swap', () => {
+    document.body.style.overflow = '';
   });
+
+  document.addEventListener('astro:page-load', initNav);
 </script>

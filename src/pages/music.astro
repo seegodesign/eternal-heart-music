@@ -27,10 +27,16 @@ const releases = await getCollection('releases');
     </section>
 
     <section class="section page-section">
-      <div class="container music-grid">
+      <div class="container">
+        <div class="music-filters" role="group" aria-label="Filter releases">
+          <button class="filter-btn filter-btn--active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="Album">Albums</button>
+          <button class="filter-btn" data-filter="Single">Singles</button>
+        </div>
+        <div class="music-grid">
         {
           releases.map((r) => (
-            <article class="card music-card">
+            <article class="card music-card" data-type={r.data.type}>
               <a href={r.data.spotify} target="_blank" rel="noopener noreferrer">
                 <img src={r.data.artwork} alt={`${r.data.title} cover`} loading="lazy" decoding="async" />
               </a>
@@ -48,6 +54,7 @@ const releases = await getCollection('releases');
             </article>
           ))
         }
+        </div>
       </div>
     </section>
   </main>
@@ -58,6 +65,35 @@ const releases = await getCollection('releases');
   .page-main { padding-top: 90px; }
   .page-hero { padding-bottom: 44px; }
   .page-section { padding-top: 40px; }
+  .music-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .filter-btn {
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--color-cream-dim);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .filter-btn:hover {
+    color: var(--color-cream);
+    border-color: var(--color-border-hi);
+  }
+  .filter-btn--active {
+    background: var(--color-amber);
+    border-color: var(--color-amber);
+    color: #0a0807;
+  }
+  .music-card--hidden { display: none; }
   .music-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -97,3 +133,22 @@ const releases = await getCollection('releases');
     .music-grid { grid-template-columns: 1fr; }
   }
 </style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards   = document.querySelectorAll<HTMLElement>('.music-card');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+
+      buttons.forEach((b) => b.classList.remove('filter-btn--active'));
+      btn.classList.add('filter-btn--active');
+
+      cards.forEach((card) => {
+        const match = filter === 'all' || card.dataset.type === filter;
+        card.classList.toggle('music-card--hidden', !match);
+      });
+    });
+  });
+</script>
