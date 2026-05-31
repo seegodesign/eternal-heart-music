@@ -250,7 +250,7 @@ const drones = [
                     <button
                       class="sb-drone-note"
                       type="button"
-                      data-src="/audio/soundbath/drone-c.wav"
+                      data-src="/audio/soundbath/drone-c.mp3"
                       data-rate={d.rate}
                       data-note={d.note}
                       aria-pressed="false"
@@ -2625,7 +2625,7 @@ const drones = [
       // Single bowl file powers all pitched bowls
       prefetchRaw("/audio/soundbath/bowl-c.mp3");
       // Pre-fetch drone files (one file per instrument, all notes pitched via playbackRate)
-      prefetchRaw("/audio/soundbath/drone-c.wav");
+      prefetchRaw("/audio/soundbath/drone-c.mp3");
       prefetchRaw("/audio/soundbath/tanpura-c.mp3");
       // Pre-fetch bansuri files
       document.querySelectorAll<HTMLButtonElement>(".bl-btn").forEach((btn) => {
