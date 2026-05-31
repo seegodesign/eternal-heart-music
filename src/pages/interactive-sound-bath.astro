@@ -204,7 +204,7 @@ const drones = [
               alt=""
               aria-hidden="true"
             />
-            Silence
+            Stop
           </button>
           <button
             class="sb-rec-btn"
@@ -263,8 +263,18 @@ const drones = [
               </div>
             </div>
             <div class="sb-drone-instrument">
-              <span class="sb-drone-label">Tanpura (Sa – Pa)</span>
-              <div class="sb-drone-grid">
+              <div class="tanpura-toggle-row">
+                <span class="sb-drone-label">Tanpura</span>
+                <div class="tanpura-toggle" id="tanpura-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle tanpura tuning: MA or PA">
+                  <span class="tanpura-toggle__label tanpura-toggle__label--ma">MA</span>
+                  <span class="tanpura-toggle__track">
+                    <span class="tanpura-toggle__thumb"></span>
+                  </span>
+                  <span class="tanpura-toggle__label tanpura-toggle__label--pa">PA</span>
+                </div>
+              </div>
+              <!-- Pa row (default visible) -->
+              <div class="sb-drone-grid" id="tanpura-pa-row">
                 {
                   drones.map((d) => (
                     <button
@@ -281,10 +291,8 @@ const drones = [
                   ))
                 }
               </div>
-            </div>
-            <div class="sb-drone-instrument">
-              <span class="sb-drone-label">Tanpura (Sa – Ma)</span>
-              <div class="sb-drone-grid">
+              <!-- Ma row (hidden until toggled) -->
+              <div class="sb-drone-grid" id="tanpura-ma-row" hidden>
                 {
                   drones.map((d) => (
                     <button
@@ -1100,6 +1108,66 @@ const drones = [
     text-transform: uppercase;
     color: rgba(200, 136, 58, 0.5);
   }
+
+  /* ── Tanpura MA / PA toggle ──────────────────────────────── */
+  .tanpura-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .tanpura-toggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .tanpura-toggle__label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .tanpura-toggle__label--ma {
+    color: rgba(200, 136, 58, 0.35);
+  }
+  .tanpura-toggle__label--pa {
+    color: rgba(200, 136, 58, 0.75);
+  }
+  /* When MA is selected (aria-checked=true) flip the label opacities */
+  .tanpura-toggle[aria-checked="true"] .tanpura-toggle__label--ma {
+    color: rgba(200, 136, 58, 0.75);
+  }
+  .tanpura-toggle[aria-checked="true"] .tanpura-toggle__label--pa {
+    color: rgba(200, 136, 58, 0.35);
+  }
+  .tanpura-toggle__track {
+    position: relative;
+    width: 34px;
+    height: 18px;
+    background: rgba(200, 136, 58, 0.15);
+    border: 1px solid rgba(200, 136, 58, 0.3);
+    border-radius: 9px;
+    transition: background 0.2s;
+  }
+  .tanpura-toggle__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-amber);
+    transition: transform 0.2s;
+  }
+  /* Thumb moves right = PA side (default). Left = MA side. */
+  .tanpura-toggle[aria-checked="false"] .tanpura-toggle__thumb {
+    transform: translateX(16px); /* PA */
+  }
+  .tanpura-toggle[aria-checked="true"] .tanpura-toggle__thumb {
+    transform: translateX(0px); /* MA */
+  }
   .sb-drone-grid {
     display: flex;
     gap: 10px;
@@ -1599,8 +1667,8 @@ const drones = [
     display: none;
   }
 
-  /* ── Mobile: stage fills screen, mixer slides up as overlay ─ */
-  @media (max-width: 780px) {
+  /* ── Tablet & mobile: stage fills screen, mixer slides up as overlay ─ */
+  @media (max-width: 1024px) {
     .sb-scope-strip {
       display: none;
     }
@@ -2345,8 +2413,8 @@ const drones = [
       mixToggleBtn?.setAttribute("aria-expanded", open ? "true" : "false");
     }
 
-    // On mobile, default to closed
-    if (window.matchMedia("(max-width: 780px)").matches) {
+    // On tablet and mobile, default to closed
+    if (window.matchMedia("(max-width: 1024px)").matches) {
       setMixerOpen(false);
     }
 
@@ -2421,9 +2489,7 @@ const drones = [
           toggleDroneNote(
             btn,
             () => tanpuraController,
-            (c) => {
-              tanpuraController = c;
-            },
+            (c) => { tanpuraController = c; },
             "tanpura",
             ".sb-drone-note--tanpura",
           ),
@@ -2436,14 +2502,45 @@ const drones = [
           toggleDroneNote(
             btn,
             () => tanpuraMaController,
-            (c) => {
-              tanpuraMaController = c;
-            },
+            (c) => { tanpuraMaController = c; },
             "tanpura",
             ".sb-drone-note--tanpura-ma",
           ),
         );
       });
+
+    // ── Tanpura MA / PA toggle ────────────────────────────────
+    const tanpuraToggle = document.getElementById("tanpura-toggle");
+    const tanpuraPaRow  = document.getElementById("tanpura-pa-row");
+    const tanpuraMaRow  = document.getElementById("tanpura-ma-row");
+
+    const stopAllTanpuras = () => {
+      tanpuraController?.stop(FADE_DUR);
+      tanpuraController = null;
+      tanpuraMaController?.stop(FADE_DUR);
+      tanpuraMaController = null;
+      document.querySelectorAll<HTMLButtonElement>(".sb-drone-note--tanpura, .sb-drone-note--tanpura-ma")
+        .forEach((b) => { b.classList.remove("active"); b.setAttribute("aria-pressed", "false"); });
+    };
+
+    tanpuraToggle?.addEventListener("click", () => {
+      const isMa = tanpuraToggle.getAttribute("aria-checked") === "true";
+      stopAllTanpuras();
+      if (isMa) {
+        // Switch to PA
+        tanpuraToggle.setAttribute("aria-checked", "false");
+        tanpuraMaRow?.setAttribute("hidden", "");
+        tanpuraPaRow?.removeAttribute("hidden");
+      } else {
+        // Switch to MA
+        tanpuraToggle.setAttribute("aria-checked", "true");
+        tanpuraPaRow?.setAttribute("hidden", "");
+        tanpuraMaRow?.removeAttribute("hidden");
+      }
+    });
+    tanpuraToggle?.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") { e.preventDefault(); (tanpuraToggle as HTMLElement).click(); }
+    });
 
     // Flute key selector
     document
@@ -2549,6 +2646,8 @@ const drones = [
       droneController = null;
       tanpuraController?.stop(FADE_DUR);
       tanpuraController = null;
+      tanpuraMaController?.stop(FADE_DUR);
+      tanpuraMaController = null;
       bansuriControllers.forEach((ctrl) => ctrl.stop(FADE_DUR));
       bansuriControllers.clear();
 
