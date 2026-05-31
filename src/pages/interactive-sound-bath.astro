@@ -1,0 +1,2639 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+
+const bowls = [
+  {
+    note: "C",
+    freq: 256,
+    color: "#b85530",
+    size: 158,
+    rate: 1,
+  },
+  {
+    note: "D",
+    freq: 288,
+    color: "#c87230",
+    size: 146,
+    rate: 1.1225,
+  },
+  {
+    note: "E",
+    freq: 324,
+    color: "#c8a030",
+    size: 134,
+    rate: 1.2599,
+  },
+  {
+    note: "F",
+    freq: 341.3,
+    color: "#5a8852",
+    size: 122,
+    rate: 1.3348,
+  },
+  {
+    note: "G",
+    freq: 384,
+    color: "#4878a0",
+    size: 111,
+    rate: 1.4983,
+  },
+  {
+    note: "A",
+    freq: 432,
+    color: "#6858a8",
+    size: 101,
+    rate: 1.6818,
+  },
+  {
+    note: "B",
+    freq: 486,
+    color: "#a090c8",
+    size: 92,
+    rate: 1.8877,
+  },
+];
+
+const bansuriLoops = [
+  { name: "Yaman",       src: "/audio/soundbath/bansuri-yaman.mp3" },
+  { name: "Desh",        src: "/audio/soundbath/bansuri-desh.mp3" },
+  { name: "Bhimpalasi",  src: "/audio/soundbath/bansuri-bhimpalasi.mp3" },
+  { name: "Bhairav",     src: "/audio/soundbath/bansuri-bhairav.mp3" },
+  { name: "Hamsadhwani", src: "/audio/soundbath/bansuri-hamsadhwani.mp3" },
+  { name: "Bhoopali",   src: "/audio/soundbath/bansuri-bhoopali.mp3" },
+];
+
+const chimesLoops = [
+  {
+    name: "Chimes One",
+    src: "/audio/soundbath/chimes-1.mp3",
+    mixId: "chimes-1",
+  },
+  {
+    name: "Chimes Two",
+    src: "/audio/soundbath/chimes-2.mp3",
+    mixId: "chimes-2",
+  },
+  {
+    name: "Chimes Three",
+    src: "/audio/soundbath/chimes-3.mp3",
+    mixId: "chimes-3",
+  },
+];
+
+const natureLoops = [
+  {
+    name: "Nature One",
+    src: "/audio/soundbath/nature-1.mp3",
+    mixId: "nature-1",
+  },
+  {
+    name: "Nature Two",
+    src: "/audio/soundbath/nature-2.mp3",
+    mixId: "nature-2",
+  },
+  {
+    name: "Nature Three",
+    src: "/audio/soundbath/nature-3.mp3",
+    mixId: "nature-3",
+  },
+];
+
+const synthLoops = [
+  { name: "Synth One", src: "/audio/soundbath/synth-1.mp3" },
+  { name: "Synth Two", src: "/audio/soundbath/synth-2.mp3" },
+  { name: "Synth Three", src: "/audio/soundbath/synth-3.mp3" },
+];
+
+// Black-key bowls — ml = margin-left (px) in the flex black-keys row at 0.75× scale
+// bs = midpoint between adjacent white-key sizes; ml keeps each sharp centred over its gap
+const sharps = [
+  { note: "C#", freq: 272, color: "#7c4220", bs: 152, ml: 67, rate: 1.0595 },
+  { note: "D#", freq: 306, color: "#7a6020", bs: 140, ml: 10, rate: 1.1892 },
+  { note: "F#", freq: 362, color: "#305e78", bs: 116, ml: 116, rate: 1.4142 },
+  { note: "G#", freq: 407, color: "#3a5888", bs: 106, ml: 10, rate: 1.5874 },
+  { note: "A#", freq: 459, color: "#5048a0", bs: 97, ml: 10, rate: 1.7818 },
+];
+
+// Drone notes — one audio file, pitched via playbackRate (rate = 2^(semitones/12) from C)
+const drones = [
+  { note: "C", rate: 1 },
+  { note: "D", rate: 1.1225 },
+  { note: "E", rate: 1.2599 },
+  { note: "F", rate: 1.3348 },
+  { note: "G", rate: 1.4983 },
+  { note: "A", rate: 1.6818 },
+  { note: "B", rate: 1.8877 },
+];
+---
+
+<Layout
+  title="Interactive Sound Bath | Eternal Heart"
+  description="Seven crystal singing bowls tuned to 432 Hz. Tap any bowl to hear it resonate. Let the tones layer and breathe."
+>
+  <Nav />
+  <div class="sb-splash" id="sb-splash" aria-live="polite">
+    <img
+      src="/logomark.svg"
+      class="sb-splash__logo"
+      alt=""
+      aria-hidden="true"
+    />
+    <h2 class="sb-splash-heading">Welcome, beloved.</h2>
+    <p class="sb-splash-intro">
+      First, let's start with a drone to establish the tonal anchor
+    </p>
+    <span class="sb-splash__hint">tap anywhere to begin</span>
+  </div>
+  <main class="sb-console">
+    <!-- Console body: stage (left) + mixer (right) -->
+    <div class="sb-console-body" data-mixer-open="true">
+      <!-- Stage: tabbed instrument panels -->
+      <div class="sb-console-stage">
+        <!-- Tab bar -->
+        <nav class="sb-tabs" role="tablist" aria-label="Instruments">
+          <button
+            class="sb-tab sb-tab--active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="sb-panel-drone"
+            id="sb-tab-drone"
+            data-sb-panel="drone"
+          >
+            Drone
+          </button>
+          <button
+            class="sb-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sb-panel-bowls"
+            id="sb-tab-bowls"
+            data-sb-panel="bowls"
+          >
+            Bowls
+          </button>
+          <button
+            class="sb-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sb-panel-wind"
+            id="sb-tab-wind"
+            data-sb-panel="wind"
+          >
+            Flute
+          </button>
+          <button
+            class="sb-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sb-panel-ambience"
+            id="sb-tab-ambience"
+            data-sb-panel="ambience"
+          >
+            Ambience
+          </button>
+          <button
+            class="sb-tab-silence"
+            id="sb-tab-silence"
+            type="button"
+            aria-label="Stop all sounds"
+          >
+            <img
+              src="/icons/stop.svg"
+              class="sb-tab-silence__icon"
+              alt=""
+              aria-hidden="true"
+            />
+            Silence
+          </button>
+          <button
+            class="sb-rec-btn"
+            id="sb-rec-btn"
+            type="button"
+            aria-label="Start recording"
+            aria-pressed="false"
+          >
+            <span class="sb-rec-btn__dot" aria-hidden="true"></span>
+            <span class="sb-rec-btn__text" id="sb-rec-text">Rec</span>
+          </button>
+          <button
+            class="mix-toggle-btn"
+            id="mix-toggle-btn"
+            type="button"
+            aria-label="Toggle mixer"
+            aria-expanded="true"
+          >
+            <img
+              src="/icons/mixer.svg"
+              class="mix-toggle-btn__icon"
+              alt=""
+              aria-hidden="true"
+            />
+            Mixer
+          </button>
+        </nav>
+
+        <!-- Drone panel (visible by default) -->
+        <div
+          class="sb-panel"
+          id="sb-panel-drone"
+          role="tabpanel"
+          aria-labelledby="sb-tab-drone"
+        >
+          <h2 class="sb-panel-title">Drone</h2>
+          <div class="sb-drone-panel">
+            <div class="sb-drone-instrument">
+              <span class="sb-drone-label">Synth</span>
+              <div class="sb-drone-grid">
+                {
+                  drones.map((d) => (
+                    <button
+                      class="sb-drone-note"
+                      type="button"
+                      data-src="/audio/soundbath/drone-c.wav"
+                      data-rate={d.rate}
+                      data-note={d.note}
+                      aria-pressed="false"
+                      aria-label={`Toggle ${d.note} synth drone`}
+                    >
+                      <span class="sb-drone-note__label">{d.note}</span>
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="sb-drone-instrument">
+              <span class="sb-drone-label">Tanpura (Sa – Pa)</span>
+              <div class="sb-drone-grid">
+                {
+                  drones.map((d) => (
+                    <button
+                      class="sb-drone-note sb-drone-note--tanpura"
+                      type="button"
+                      data-src="/audio/soundbath/tanpura-c.mp3"
+                      data-rate={d.rate}
+                      data-note={d.note}
+                      aria-pressed="false"
+                      aria-label={`Toggle ${d.note} tanpura (Sa–Pa)`}
+                    >
+                      <span class="sb-drone-note__label">{d.note}</span>
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="sb-drone-instrument">
+              <span class="sb-drone-label">Tanpura (Sa – Ma)</span>
+              <div class="sb-drone-grid">
+                {
+                  drones.map((d) => (
+                    <button
+                      class="sb-drone-note sb-drone-note--tanpura-ma"
+                      type="button"
+                      data-src="/audio/soundbath/tanpura-ma-c.mp3"
+                      data-rate={d.rate}
+                      data-note={d.note}
+                      aria-pressed="false"
+                      aria-label={`Toggle ${d.note} tanpura (Sa–Ma)`}
+                    >
+                      <span class="sb-drone-note__label">{d.note}</span>
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bowls panel -->
+        <div
+          class="sb-panel"
+          id="sb-panel-bowls"
+          role="tabpanel"
+          aria-labelledby="sb-tab-bowls"
+          hidden
+        >
+          <h2 class="sb-panel-title">Bowls</h2>
+          <div class="sb-piano">
+            <!-- Black keys (sharps/flats) -->
+            <div
+              class="sb-piano__blacks"
+              role="group"
+              aria-label="Sharp and flat bowls"
+            >
+              {
+                sharps.map((s) => (
+                  <button
+                    class="sb-bowl sb-bowl--sharp"
+                    type="button"
+                    style={`--bs: ${s.bs}; margin-left: ${s.ml}px;`}
+                    data-freq={s.freq}
+                    data-src="/audio/soundbath/bowl-c.mp3"
+                    data-rate={s.rate}
+                    aria-label={`${s.note} bowl, ${s.freq} Hz`}
+                  >
+                    <span class="sb-bowl__inner" aria-hidden="true" />
+                    <span class="sb-bowl__labels">
+                      <span class="sb-bowl__note">{s.note}</span>
+                    </span>
+                  </button>
+                ))
+              }
+            </div>
+            <!-- White keys (naturals) -->
+            <div
+              class="sb-piano__whites"
+              role="group"
+              aria-label="Tap a bowl to play"
+            >
+              {
+                bowls.map((b) => (
+                  <button
+                    class="sb-bowl"
+                    type="button"
+                    style={`--bs: ${b.size};`}
+                    data-freq={b.freq}
+                    data-src="/audio/soundbath/bowl-c.mp3"
+                    data-rate={b.rate}
+                    aria-label={`${b.note} bowl, ${b.freq} Hz`}
+                  >
+                    <span class="sb-bowl__inner" aria-hidden="true" />
+                    <span class="sb-bowl__labels">
+                      <span class="sb-bowl__note">{b.note}</span>
+                    </span>
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Wind (Bansuri) panel -->
+        <div
+          class="sb-panel"
+          id="sb-panel-wind"
+          role="tabpanel"
+          aria-labelledby="sb-tab-wind"
+          hidden
+        >
+          <h2 class="sb-panel-title">Flute</h2>
+          <div class="sb-flute-panel">
+            <div class="sb-flute-key-row">
+              <span class="sb-flute-key-label">Key</span>
+              <div class="sb-flute-keys">
+                {
+                  drones.map((d) => (
+                    <button
+                      class:list={["sb-flute-key", { active: d.note === "C" }]}
+                      type="button"
+                      data-rate={d.rate}
+                      data-note={d.note}
+                      aria-pressed={d.note === "C" ? "true" : "false"}
+                      aria-label={`Flute key ${d.note}`}
+                    >
+                      {d.note}
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="bl-grid">
+                  {
+                    bansuriLoops.map((loop) => (
+                      <button
+                        class="bl-btn"
+                        type="button"
+                        data-src={loop.src}
+                        data-mix-id="flute"
+                        aria-pressed="false"
+                        aria-label={`Toggle ${loop.name} bansuri loop`}
+                      >
+                        <span class="bl-wave" aria-hidden="true">
+                          <>
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                          </>
+                        </span>
+                        <span class="bl-btn__name">{loop.name}</span>
+                        <span class="bl-btn__dot" aria-hidden="true" />
+                      </button>
+                    ))
+                  }
+                </div>
+          </div>
+        </div>
+
+        <!-- Ambience (Chimes + Nature) panel -->
+        <div
+          class="sb-panel"
+          id="sb-panel-ambience"
+          role="tabpanel"
+          aria-labelledby="sb-tab-ambience"
+          hidden
+        >
+          <h2 class="sb-panel-title">Ambience</h2>
+          <div class="bl-ambience-columns">
+            <div class="bl-ambience-col">
+              <span class="bl-ambience-col-header">Chimes</span>
+              <div class="bl-grid">
+                {
+                  chimesLoops.map((loop) => (
+                    <button
+                      class="bl-btn"
+                      type="button"
+                      data-src={loop.src}
+                      data-mix-id="chimes"
+                      aria-pressed="false"
+                      aria-label={`Toggle ${loop.name}`}
+                    >
+                      <span class="bl-wave" aria-hidden="true">
+                        <>
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                        </>
+                      </span>
+                      <span class="bl-btn__name">{loop.name}</span>
+                      <span class="bl-btn__dot" aria-hidden="true" />
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="bl-ambience-col">
+              <span class="bl-ambience-col-header">Nature</span>
+              <div class="bl-grid">
+                {
+                  natureLoops.map((loop) => (
+                    <button
+                      class="bl-btn"
+                      type="button"
+                      data-src={loop.src}
+                      data-mix-id="nature"
+                      aria-pressed="false"
+                      aria-label={`Toggle ${loop.name}`}
+                    >
+                      <span class="bl-wave" aria-hidden="true">
+                        <>
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                        </>
+                      </span>
+                      <span class="bl-btn__name">{loop.name}</span>
+                      <span class="bl-btn__dot" aria-hidden="true" />
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="bl-ambience-col">
+              <span class="bl-ambience-col-header">Synth</span>
+              <div class="bl-grid">
+                {
+                  synthLoops.map((loop) => (
+                    <button
+                      class="bl-btn"
+                      type="button"
+                      data-src={loop.src}
+                      data-mix-id="synth"
+                      aria-pressed="false"
+                      aria-label={`Toggle ${loop.name}`}
+                    >
+                      <span class="bl-wave" aria-hidden="true">
+                        <>
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                        </>
+                      </span>
+                      <span class="bl-btn__name">{loop.name}</span>
+                      <span class="bl-btn__dot" aria-hidden="true" />
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.sb-console-stage -->
+
+      <!-- Mixer aside: always visible -->
+      <aside class="sb-console-mixer" aria-label="Mixer">
+        <img
+          src="/logomark.svg"
+          class="mix-logomark"
+          alt=""
+          aria-hidden="true"
+        />
+        <h2 class="mix-heading">Mixer</h2>
+        <div class="mix-board">
+          <div class="mix-channel">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-drone"
+                min="0"
+                max="100"
+                value="80"
+                data-mix-id="drone"
+                aria-label="Drone volume"
+              />
+            </div>
+            <span class="mix-label">Synth</span>
+            <span class="mix-value" id="mix-drone-val">80</span>
+          </div>
+          <div class="mix-channel">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-tanpura"
+                min="0"
+                max="100"
+                value="80"
+                data-mix-id="tanpura"
+                aria-label="Tanpura volume"
+              />
+            </div>
+            <span class="mix-label">Tanpura</span>
+            <span class="mix-value" id="mix-tanpura-val">80</span>
+          </div>
+          <div class="mix-channel">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-bowls"
+                min="0"
+                max="100"
+                value="80"
+                data-mix-id="bowls"
+                aria-label="Bowl master volume"
+              />
+            </div>
+            <span class="mix-label">Bowls</span>
+            <span class="mix-value" id="mix-bowls-val">80</span>
+          </div>
+          <div class="mix-channel">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-flute"
+                min="0"
+                max="100"
+                value="80"
+                data-mix-id="flute"
+                aria-label="Flute volume"
+              />
+            </div>
+            <span class="mix-label">Flute</span>
+            <span class="mix-value" id="mix-flute-val">80</span>
+          </div>
+          <div class="mix-channel">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-chimes"
+                min="0"
+                max="100"
+                value="80"
+                data-mix-id="chimes"
+                aria-label="Chimes volume"
+              />
+            </div>
+            <span class="mix-label">Chimes</span>
+            <span class="mix-value" id="mix-chimes-val">80</span>
+          </div>
+          <div class="mix-channel">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-nature"
+                min="0"
+                max="100"
+                value="80"
+                data-mix-id="nature"
+                aria-label="Nature volume"
+              />
+            </div>
+            <span class="mix-label">Nature</span>
+            <span class="mix-value" id="mix-nature-val">80</span>
+          </div>
+          <div class="mix-channel">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-synth"
+                min="0"
+                max="100"
+                value="80"
+                data-mix-id="synth"
+                aria-label="Synth volume"
+              />
+            </div>
+            <span class="mix-label">Synth</span>
+            <span class="mix-value" id="mix-synth-val">80</span>
+          </div>
+          <div class="mix-channel mix-channel--master">
+            <div class="mix-fader-wrap">
+              <input
+                class="mix-fader"
+                type="range"
+                id="mix-master"
+                min="0"
+                max="300"
+                value="150"
+                data-mix-id="master"
+                aria-label="Master volume"
+              />
+            </div>
+            <span class="mix-label">Master</span>
+            <span class="mix-value" id="mix-master-val">150</span>
+          </div>
+        </div>
+      </aside>
+    </div><!-- /.sb-console-body -->
+    <div class="mix-backdrop" id="mix-backdrop" aria-hidden="true"></div>
+
+    <!-- Scope strip (full width, always visible) -->
+    <div class="sb-scope-strip">
+      <canvas id="scope-canvas" class="scope-canvas" aria-hidden="true"
+      ></canvas>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Prevent page-level scroll — this page is a fixed-height app shell */
+  :global(html),
+  :global(body) {
+    overflow: hidden;
+  }
+
+  /* Hide the persistent music player on this page */
+  :global(.hero__player-layer) {
+    display: none !important;
+  }
+
+  /* ── Console layout ──────────────────────────────────────── */
+  .sb-console {
+    display: flex;
+    flex-direction: column;
+    height: calc(100dvh - var(--nav-h, 84px));
+    margin-top: var(--nav-h, 84px);
+    background: var(--color-bg);
+    overflow: hidden;
+  }
+
+  /* Scope strip */
+  .sb-scope-strip {
+    flex: 0 0 90px;
+    height: 90px; /* explicit height so canvas % works */
+    position: relative;
+    background: rgb(5, 3, 1);
+    border-top: 1px solid var(--color-border);
+  }
+  .scope-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Console body: stage + mixer side by side */
+  .sb-console-body {
+    flex: 1 1 0;
+    display: flex;
+    min-height: 0;
+  }
+
+  /* Stage: holds tabs + instrument panels */
+  .sb-console-stage {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border-right: 1px solid var(--color-border);
+  }
+
+  /* ── Tab bar ─────────────────────────────────────────────── */
+  .sb-tabs {
+    display: flex;
+    flex: 0 0 auto;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(8, 5, 2, 0.7);
+  }
+  .sb-tab {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.5);
+    padding: 13px 20px 11px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+    margin-bottom: -1px;
+  }
+  .sb-tab:hover {
+    color: rgba(200, 136, 58, 0.72);
+  }
+  .sb-tab--active {
+    color: var(--color-amber);
+    border-bottom-color: var(--color-amber);
+  }
+  .mix-toggle-btn {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.5);
+    padding: 13px 16px 11px;
+    margin-left: 0;
+    background: none;
+    border: none;
+    border-left: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .mix-toggle-btn__icon {
+    width: 14px;
+    height: 12px;
+    flex-shrink: 0;
+    opacity: 0.5;
+    filter: invert(62%) sepia(42%) saturate(600%) hue-rotate(5deg)
+      brightness(95%);
+    transition:
+      opacity 0.2s,
+      filter 0.2s;
+  }
+  .mix-toggle-btn:hover .mix-toggle-btn__icon {
+    opacity: 1;
+    filter: invert(62%) sepia(42%) saturate(600%) hue-rotate(5deg)
+      brightness(110%);
+  }
+  .mix-toggle-btn[aria-expanded="true"] .mix-toggle-btn__icon {
+    opacity: 1;
+    filter: invert(72%) sepia(55%) saturate(500%) hue-rotate(5deg)
+      brightness(105%);
+  }
+  .mix-toggle-btn:hover {
+    color: rgba(200, 136, 58, 0.85);
+  }
+  .mix-toggle-btn[aria-expanded="true"] {
+    color: var(--color-amber);
+  }
+  .sb-tab-silence {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.5);
+    padding: 13px 16px 11px 0;
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .sb-tab-silence__icon {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+    /* SVG uses currentColor but <img> can't inherit — filter maps white→amber at 50% opacity */
+    opacity: 0.5;
+    filter: invert(62%) sepia(42%) saturate(600%) hue-rotate(5deg)
+      brightness(95%);
+    transition:
+      opacity 0.2s,
+      filter 0.2s;
+  }
+  .sb-tab-silence:hover {
+    color: rgba(220, 80, 60, 0.85);
+  }
+  .sb-tab-silence:hover .sb-tab-silence__icon {
+    opacity: 1;
+    filter: invert(30%) sepia(90%) saturate(400%) hue-rotate(350deg)
+      brightness(110%);
+  }
+
+  /* ── Record button ───────────────────────────────────────── */
+  .sb-rec-btn {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.5);
+    padding: 13px 16px 11px;
+    background: none;
+    border: none;
+    border-left: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .sb-rec-btn:hover {
+    color: rgba(200, 136, 58, 0.85);
+  }
+  .sb-rec-btn__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .sb-rec-btn--active {
+    color: #e05050 !important;
+  }
+  .sb-rec-btn--active .sb-rec-btn__dot {
+    background: #e05050;
+    animation: rec-pulse 1.2s ease-in-out infinite;
+  }
+  .sb-rec-btn--active:hover {
+    color: #e87070 !important;
+  }
+  @keyframes rec-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.15; }
+  }
+
+  /* ── Panels ──────────────────────────────────────────────── */
+  .sb-panel {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 28px;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+  }
+  .sb-panel[hidden] {
+    display: none !important;
+  }
+  @keyframes sb-panel-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .sb-panel:not([hidden]) {
+    animation: sb-panel-fade-in 1s ease;
+  }
+
+  .sb-panel-title {
+    font-family: var(--font-serif);
+    font-size: 44px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: rgba(200, 136, 58, 0.65);
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Panel background images ─────────────────────────────── */
+  .sb-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
+  }
+  /* #sb-panel-drone::before {
+    background-image: url('/images/studio.avif');
+  } */
+  #sb-panel-bowls::before {
+    background-image: url("/images/bowls.avif");
+  }
+  #sb-panel-wind::before {
+    background-image: url("/images/journal/ancient-art-of-bansuri-flute.avif");
+  }
+  #sb-panel-ambience::before {
+    background-image: url("/images/forest.avif");
+  }
+
+  /* ── Singing bowls — piano keyboard layout ─────────────── */
+  .sb-piano {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sb-piano__blacks {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: -18px; /* overlap white key tops slightly */
+    position: relative;
+    z-index: 1;
+  }
+  .sb-piano__whites {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  /* Sharp/flat bowls: only note name shown */
+  .sb-bowl--sharp .sb-bowl__note {
+    font-size: calc(var(--bs) * 0.105px);
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .sb-bowl {
+    --bc: #c8883a;
+    --bs: 100;
+    position: relative;
+    flex: 0 0 auto;
+    width: calc(var(--bs) * 0.75px);
+    height: calc(var(--bs) * 0.75px);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0;
+    transition: transform 0.1s ease;
+    /* dark outer rim — inner element sits inset on top of this */
+    background: color-mix(in srgb, var(--bc) 22%, #050302 78%);
+  }
+
+  .sb-bowl__inner {
+    position: absolute;
+    inset: 10%;
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse 60% 50% at 36% 36%,
+      color-mix(in srgb, var(--bc) 70%, #000 30%),
+      color-mix(in srgb, var(--bc) 52%, #000 48%) 45%,
+      color-mix(in srgb, var(--bc) 35%, #000 65%) 75%,
+      color-mix(in srgb, var(--bc) 22%, #000 78%) 100%
+    );
+    box-shadow:
+      inset -4px -5px 14px rgba(0, 0, 0, 0.6),
+      inset 2px 3px 6px rgba(255, 255, 255, 0.07),
+      0 4px 18px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.25s ease;
+  }
+
+  .sb-bowl:hover {
+    transform: scale(1.05);
+  }
+  .sb-bowl:active {
+    transform: scale(0.97);
+    transition-duration: 0.05s;
+  }
+
+  .sb-bowl:hover .sb-bowl__inner {
+    box-shadow:
+      inset -3px -4px 10px rgba(0, 0, 0, 0.45),
+      inset 2px 3px 8px rgba(255, 255, 255, 0.15),
+      0 6px 24px rgba(0, 0, 0, 0.55),
+      0 0 24px color-mix(in srgb, var(--bc) 50%, transparent),
+      0 0 0 1px rgba(0, 0, 0, 0.3);
+  }
+
+  .sb-bowl.playing .sb-bowl__inner {
+    box-shadow:
+      inset -3px -4px 10px rgba(0, 0, 0, 0.45),
+      inset 2px 3px 8px rgba(255, 255, 255, 0.15),
+      0 0 36px color-mix(in srgb, var(--bc) 70%, transparent),
+      0 0 12px color-mix(in srgb, var(--bc) 45%, transparent),
+      0 0 0 1px rgba(0, 0, 0, 0.3);
+  }
+
+  .sb-bowl__labels {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    pointer-events: none;
+  }
+  .sb-bowl__note {
+    font-family: var(--font-serif);
+    font-size: calc(var(--bs) * 0.12px);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1;
+  }
+  /* Ripple */
+  @keyframes sb-ripple-anim {
+    from {
+      opacity: 0.5;
+      transform: scale(0.85);
+    }
+    to {
+      opacity: 0;
+      transform: scale(3);
+    }
+  }
+  .sb-ripple,
+  .sb-ripple--2 {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--bc);
+    animation: sb-ripple-anim 1.8s cubic-bezier(0.2, 0.5, 0.4, 1) forwards;
+    pointer-events: none;
+  }
+  .sb-ripple--2 {
+    animation-delay: 0.35s;
+    opacity: 0.4;
+  }
+
+  /* ── Drone panel ─────────────────────────────────────────── */
+  .sb-drone-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .sb-drone-instrument {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .sb-drone-label {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.5);
+  }
+  .sb-drone-grid {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .sb-drone-note {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(12, 8, 4, 0.7);
+    border: 1px solid var(--color-border-hi);
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      box-shadow 0.2s,
+      border-color 0.2s;
+  }
+  .sb-drone-note:hover {
+    background: rgba(200, 136, 58, 0.07);
+    box-shadow: 0 0 16px rgba(200, 136, 58, 0.14);
+  }
+  .sb-drone-note.active {
+    background: rgba(200, 136, 58, 0.11);
+    border-color: var(--color-amber);
+    box-shadow: 0 0 28px rgba(200, 136, 58, 0.22);
+    animation: drone-pulse 3s ease-in-out infinite;
+  }
+  .sb-drone-note__label {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: rgba(200, 136, 58, 0.6);
+    transition: color 0.2s;
+  }
+  .sb-drone-note.active .sb-drone-note__label {
+    color: var(--color-cream);
+  }
+  @keyframes drone-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(200, 136, 58, 0.18);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(200, 136, 58, 0.38);
+    }
+  }
+
+  /* ── Bansuri (Wind) panel ────────────────────────────────── */
+  .bl-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 380px;
+  }
+  /* ── Ambience two-column layout ──────────────────────────── */
+  .bl-ambience-columns {
+    display: flex;
+    gap: 28px;
+    width: 100%;
+    max-width: 780px;
+  }
+  .bl-ambience-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .bl-ambience-col .bl-grid {
+    max-width: none;
+  }
+  .bl-ambience-col-header {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.8);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* ── Flute key selector ──────────────────────────────────── */
+  .sb-flute-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 780px;
+  }
+  .sb-flute-key-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .sb-flute-key-label {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.7);
+  }
+  .sb-flute-keys {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
+  .sb-flute-key {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(12, 8, 4, 0.7);
+    border: 1px solid var(--color-border-hi);
+    cursor: pointer;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    color: rgba(200, 136, 58, 0.6);
+    transition:
+      background 0.2s,
+      box-shadow 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .sb-flute-key:hover {
+    background: rgba(200, 136, 58, 0.07);
+    box-shadow: 0 0 16px rgba(200, 136, 58, 0.14);
+  }
+  .sb-flute-key.active {
+    background: rgba(200, 136, 58, 0.11);
+    border-color: var(--color-amber);
+    box-shadow: 0 0 28px rgba(200, 136, 58, 0.22);
+    color: var(--color-cream);
+  }
+
+  .bl-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    background: rgba(10, 7, 3, 0.65);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+    transition:
+      background 0.25s,
+      border-color 0.25s;
+  }
+  .bl-btn:hover {
+    background: rgba(200, 136, 58, 0.06);
+    border-color: var(--color-border-hi);
+  }
+  .bl-btn.active {
+    background: rgba(200, 136, 58, 0.1);
+    border-color: var(--color-amber);
+  }
+
+  .bl-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+  .bl-wave span {
+    display: block;
+    width: 2px;
+    height: 7px;
+    background: rgba(200, 136, 58, 0.4);
+    border-radius: 1px;
+  }
+  .bl-btn.active .bl-wave span {
+    background: var(--color-amber);
+    animation: bl-wave-anim 0.55s ease-in-out infinite alternate;
+  }
+  .bl-btn.active .bl-wave span:nth-child(2) {
+    animation-delay: 0.11s;
+  }
+  .bl-btn.active .bl-wave span:nth-child(3) {
+    animation-delay: 0.22s;
+  }
+  .bl-btn.active .bl-wave span:nth-child(4) {
+    animation-delay: 0.08s;
+  }
+  .bl-btn.active .bl-wave span:nth-child(5) {
+    animation-delay: 0.17s;
+  }
+
+  @keyframes bl-wave-anim {
+    from {
+      transform: scaleY(0.3);
+    }
+    to {
+      transform: scaleY(2);
+    }
+  }
+
+  .bl-btn__name {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 1);
+    flex: 1;
+  }
+  .bl-btn.active .bl-btn__name {
+    color: var(--color-amber);
+  }
+
+  .bl-btn__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1px solid rgba(200, 136, 58, 0.3);
+    transition:
+      background 0.25s,
+      border-color 0.25s;
+    flex-shrink: 0;
+  }
+  .bl-btn.active .bl-btn__dot {
+    background: var(--color-amber);
+    border-color: var(--color-amber);
+    box-shadow: 0 0 6px rgba(200, 136, 58, 0.5);
+  }
+
+  /* ── Mixer aside ─────────────────────────────────────────── */
+  @keyframes mix-logo-pulse {
+    0%,
+    100% {
+      opacity: 0.25;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.55;
+      transform: scale(1.05);
+    }
+  }
+  .mix-logomark {
+    width: 148px;
+    height: auto;
+    opacity: 0.25;
+    animation: mix-logo-pulse 4s ease-in-out infinite;
+    flex-shrink: 0;
+    margin-bottom: 50px;
+  }
+  .mix-heading {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+    opacity: 0.6;
+    margin: 0 0 8px;
+  }
+  .sb-console-mixer {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    gap: 20px;
+    background: rgba(7, 5, 2, 0.75);
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 500px;
+    transition:
+      max-width 0.35s ease,
+      padding-left 0.35s ease,
+      padding-right 0.35s ease,
+      opacity 0.25s ease;
+  }
+  /* Desktop: mixer collapses when toggled */
+  .sb-console-body[data-mixer-open="false"] .sb-console-mixer {
+    max-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .mix-board {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .mix-channel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 48px;
+  }
+
+  .mix-channel--master {
+    padding-left: 12px;
+    margin-left: 8px;
+  }
+
+  /* Vertical fader: rotate a horizontal <input type=range> */
+  .mix-fader-wrap {
+    width: 48px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .mix-fader {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 160px;
+    height: 3px;
+    transform: rotate(-90deg);
+    cursor: pointer;
+    background: transparent;
+    outline: none;
+    border: none;
+  }
+  .mix-fader::-webkit-slider-runnable-track {
+    height: 3px;
+    background: rgba(200, 136, 58, 0.18);
+    border-radius: 2px;
+  }
+  .mix-fader::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-amber);
+    margin-top: -5.5px;
+    box-shadow: 0 0 6px rgba(200, 136, 58, 0.5);
+    cursor: pointer;
+    transition:
+      transform 0.1s,
+      box-shadow 0.1s;
+  }
+  .mix-fader::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(200, 136, 58, 0.7);
+  }
+  .mix-fader::-moz-range-track {
+    height: 3px;
+    background: rgba(200, 136, 58, 0.18);
+    border-radius: 2px;
+  }
+  .mix-fader::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-amber);
+    border: none;
+    box-shadow: 0 0 6px rgba(200, 136, 58, 0.5);
+    cursor: pointer;
+  }
+  .mix-channel--master .mix-fader::-webkit-slider-thumb {
+    background: var(--color-cream);
+    box-shadow: 0 0 6px rgba(232, 220, 200, 0.5);
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  .mix-channel--master .mix-fader::-moz-range-thumb {
+    background: var(--color-cream);
+  }
+  .mix-channel--master.is-clipping .mix-fader::-webkit-slider-thumb {
+    background: #e04444 !important;
+    box-shadow: 0 0 10px rgba(224, 68, 68, 0.8) !important;
+  }
+  .mix-channel--master.is-clipping .mix-fader::-moz-range-thumb {
+    background: #e04444 !important;
+  }
+
+  .mix-label {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 1);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 46px;
+  }
+  .mix-channel--master .mix-label {
+    color: rgba(232, 220, 200, 0.8);
+  }
+
+  .mix-value {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    color: rgba(200, 136, 58, 0.8);
+    text-align: center;
+    min-width: 20px;
+  }
+
+  /* Silence button */
+  .sb-silence {
+    font-family: var(--font-sans);
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.4);
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .sb-silence:hover {
+    color: var(--color-amber);
+    border-color: var(--color-border-hi);
+  }
+
+  /* ── Splash screen ─────────────────────────────────────── */
+  .sb-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: var(--color-bg);
+    cursor: pointer;
+    transition: opacity 1s ease;
+  }
+  .sb-splash-heading {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--color-cream);
+    margin: 0;
+    line-height: 1;
+  }
+  .sb-splash-intro {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-style: italic;
+    color: rgba(200, 136, 58, 1);
+    letter-spacing: 0.02em;
+    text-align: center;
+    max-width: 360px;
+    line-height: 1.5;
+  }
+  .sb-splash.sb-splash--hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sb-splash__logo {
+    width: 120px;
+    height: auto;
+    opacity: 0.5;
+    margin-bottom: 12px;
+  }
+  .sb-splash__hint {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(200, 136, 58, 0.35);
+    margin-top: 24px;
+    animation: splash-hint-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes splash-hint-pulse {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* ── Mixer backdrop (mobile only) ──────────────────────── */
+  .mix-backdrop {
+    display: none;
+  }
+
+  /* ── Mobile: stage fills screen, mixer slides up as overlay ─ */
+  @media (max-width: 780px) {
+    .sb-scope-strip {
+      display: none;
+    }
+    :global(html),
+    :global(body) {
+      overflow: auto;
+    }
+    .sb-console {
+      height: auto;
+      min-height: calc(100dvh - var(--nav-h, 84px));
+      overflow: visible;
+    }
+    .sb-console-body {
+      flex-direction: column;
+    }
+    .sb-console-stage {
+      border-right: none;
+    }
+    .sb-tabs {
+      padding: 0;
+    }
+    .sb-tab {
+      padding: 11px 8px 9px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+    .sb-tab-silence,
+    .mix-toggle-btn,
+    .sb-rec-btn {
+      font-size: 0;
+      gap: 0;
+    }
+    .sb-rec-btn__dot {
+      width: 9px;
+      height: 9px;
+    }
+    .sb-drone-note {
+      width: 48px;
+      height: 48px;
+    }
+    .sb-drone-note__label {
+      font-size: 18px;
+    }
+    .sb-flute-keys {
+      flex-wrap: wrap;
+    }
+    /* Mixer: slide-up overlay on mobile */
+    .sb-console-mixer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      max-width: 100% !important;
+      padding: 20px 20px 32px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: 65vh;
+      z-index: 200;
+      border-top: 1px solid var(--color-border-hi);
+      box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.65);
+      transform: translateY(100%);
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        transform 0.35s ease,
+        opacity 0.3s ease;
+    }
+    .sb-console-body[data-mixer-open="true"] .sb-console-mixer {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mix-board {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    /* Semi-transparent backdrop behind the mixer overlay */
+    .mix-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 199;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .sb-console-body[data-mixer-open="true"] ~ .mix-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sb-panel {
+      padding: 24px 16px;
+      min-height: 240px;
+    }
+    .bl-wave {
+      display: none;
+    }
+    .sb-piano__whites {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .sb-piano__blacks {
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .sb-bowl {
+      width: 48px;
+      height: 48px;
+      background: rgba(12, 8, 4, 0.7);
+      border: 1px solid var(--color-border-hi);
+      overflow: visible;
+      transition:
+        background 0.2s,
+        box-shadow 0.2s,
+        border-color 0.2s;
+    }
+    .sb-bowl__inner {
+      display: none;
+    }
+    .sb-bowl__note {
+      font-size: 18px;
+      color: rgba(200, 136, 58, 0.6);
+    }
+    .sb-bowl:hover {
+      transform: none;
+      background: rgba(200, 136, 58, 0.07);
+      box-shadow: 0 0 16px rgba(200, 136, 58, 0.14);
+    }
+    .sb-bowl.playing {
+      background: rgba(200, 136, 58, 0.11);
+      border-color: var(--color-amber);
+      box-shadow: 0 0 28px rgba(200, 136, 58, 0.22);
+    }
+    .sb-bowl.playing .sb-bowl__note {
+      color: var(--color-cream);
+    }
+    .sb-bowl--sharp {
+      margin-left: 0 !important;
+    }
+  }
+</style>
+
+<script>
+  /** ── Singing bowl audio engine ─────────────────────────────
+   *  - Real samples from /audio/bowls/*.mp3 when available
+   *  - Inharmonic-partial synthesis as instant fallback
+   *  - rawCache stores pre-fetched ArrayBuffers (no AudioContext needed)
+   *  - bufCache stores decoded AudioBuffers (cleared on context close)
+   *  - Idle pre-fetch so first tap is instant
+   */
+
+  let audioCtx: AudioContext | null = null;
+  const rawCache = new Map<string, ArrayBuffer>(); // fetched bytes
+  const bufCache = new Map<string, AudioBuffer>(); // decoded buffers
+
+  // Drone looping state
+  type DroneCtrl = {
+    note: string;
+    rate: number;
+    stop: (fadeDur?: number) => void;
+  } | null;
+  let droneController: DroneCtrl = null;
+  let tanpuraController: DroneCtrl = null;
+  let tanpuraMaController: DroneCtrl = null;
+  let fluteKey = { note: "C", rate: 1 };
+  const bansuriControllers = new Map<
+    string,
+    { stop: (fadeDur?: number) => void }
+  >();
+  const mixerGains = new Map<string, GainNode>();
+
+  // Scope visualiser state
+  let analyserNode: AnalyserNode | null = null;
+  let scopeCanvas: HTMLCanvasElement | null = null;
+  let scopeCtx2d: CanvasRenderingContext2D | null = null;
+  let scopeData: Uint8Array<ArrayBuffer> | null = null;
+  let clipHoldTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  // Recorder state
+  let scriptProcessor: ScriptProcessorNode | null = null;
+  let recFadeGain: GainNode | null = null;
+  let recSamples: Float32Array[] = [];
+  let recSampleRate = 0;
+  let recTimerInterval: ReturnType<typeof setInterval> | null = null;
+  let recStartTime = 0;
+
+  function getCtx(): AudioContext {
+    if (!audioCtx) {
+      audioCtx = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }
+
+  // ── Per-channel mixer gain node ────────────────────────────────
+  // Lazily created on first use; reads the current slider value so levels
+  // are already correct even on the very first note played.
+  function getMixerGain(id: string): GainNode {
+    if (mixerGains.has(id)) return mixerGains.get(id)!;
+    const ctx = getCtx();
+    const gain = ctx.createGain();
+    const slider = document.getElementById(
+      "mix-" + id,
+    ) as HTMLInputElement | null;
+    gain.gain.value = slider ? parseFloat(slider.value) / 100 : 0.8;
+    gain.connect(getMasterGain());
+    mixerGains.set(id, gain);
+    return gain;
+  }
+
+  // Master gain sits between all channel gains and ctx.destination.
+  // Stored in mixerGains under 'master' so it auto-clears on silence.
+  function getMasterGain(): GainNode {
+    if (mixerGains.has("master")) return mixerGains.get("master")!;
+    const ctx = getCtx();
+    const gain = ctx.createGain();
+    const slider = document.getElementById(
+      "mix-master",
+    ) as HTMLInputElement | null;
+    gain.gain.value = slider ? parseFloat(slider.value) / 100 : 1.0;
+    const an = getAnalyser(ctx);
+    gain.connect(an);
+    an.connect(ctx.destination);
+    mixerGains.set("master", gain);
+    return gain;
+  }
+
+  // ── Scope visualiser ──────────────────────────────────────────
+
+  function getAnalyser(ctx?: AudioContext): AnalyserNode {
+    if (analyserNode) return analyserNode;
+    const c = ctx ?? getCtx();
+    analyserNode = c.createAnalyser();
+    analyserNode.fftSize = 2048;
+    analyserNode.smoothingTimeConstant = 0.75;
+    return analyserNode;
+  }
+
+  function drawScopeFrame(): void {
+    if (!scopeCanvas || !scopeCtx2d) return;
+    const c = scopeCtx2d;
+    const W = scopeCanvas.offsetWidth;
+    const H = scopeCanvas.offsetHeight;
+
+    c.clearRect(0, 0, W, H);
+
+    if (analyserNode && audioCtx && audioCtx.state === "running") {
+      const n = analyserNode.fftSize;
+      if (!scopeData || scopeData.length !== n)
+        scopeData = new Uint8Array(n) as Uint8Array<ArrayBuffer>;
+      analyserNode.getByteTimeDomainData(scopeData);
+
+      // Clip detection — byte values 0 or 255 mean ±full-scale
+      const masterCh = document.querySelector<HTMLElement>(".mix-channel--master");
+      if (masterCh) {
+        let clipping = false;
+        for (let s = 0; s < scopeData.length; s++) {
+          if (scopeData[s] <= 1 || scopeData[s] >= 254) { clipping = true; break; }
+        }
+        if (clipping) {
+          masterCh.classList.add("is-clipping");
+          if (clipHoldTimeout !== null) clearTimeout(clipHoldTimeout);
+          clipHoldTimeout = setTimeout(() => {
+            masterCh.classList.remove("is-clipping");
+            clipHoldTimeout = null;
+          }, 1500);
+        }
+      }
+
+      // Draw one segment per CSS pixel for a clean line
+      const step = Math.max(1, Math.floor(n / W));
+      c.save();
+      c.shadowColor = "rgba(200, 136, 58, 0.5)";
+      c.shadowBlur = 8;
+      c.strokeStyle = "rgba(200, 136, 58, 0.9)";
+      c.lineWidth = 1.5;
+      c.lineJoin = "round";
+      c.beginPath();
+      let first = true;
+      for (let i = 0; i < n; i += step) {
+        const x = (i / n) * W;
+        const y = (scopeData[i] / 128 - 1) * (H * 0.42) + H * 0.5;
+        if (first) {
+          c.moveTo(x, y);
+          first = false;
+        } else c.lineTo(x, y);
+      }
+      c.stroke();
+      c.restore();
+    } else {
+      // Idle: faint centre line
+      c.strokeStyle = "rgba(200, 136, 58, 0.14)";
+      c.lineWidth = 1;
+      c.beginPath();
+      c.moveTo(0, H * 0.5);
+      c.lineTo(W, H * 0.5);
+      c.stroke();
+    }
+  }
+
+  function startScopeLoop(): void {
+    const loop = (): void => {
+      drawScopeFrame();
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+
+  // ── Fetch raw bytes at low priority (no AudioContext needed) ──
+  async function prefetchRaw(url: string): Promise<void> {
+    if (rawCache.has(url) || bufCache.has(url)) return;
+    try {
+      const res = await fetch(url, { priority: "low" } as RequestInit);
+      if (!res.ok) return;
+      rawCache.set(url, await res.arrayBuffer());
+    } catch {}
+  }
+
+  // ── Get a decoded AudioBuffer, decoding from raw cache or fetching fresh ──
+  async function getBuffer(url: string): Promise<AudioBuffer | null> {
+    if (bufCache.has(url)) return bufCache.get(url)!;
+    const ctx = getCtx();
+    let raw = rawCache.get(url);
+    if (!raw) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        raw = await res.arrayBuffer();
+        rawCache.set(url, raw);
+      } catch {
+        return null;
+      }
+    }
+    try {
+      // .slice(0) clones the ArrayBuffer — decodeAudioData transfers (neuters) its arg
+      const buf = await ctx.decodeAudioData(raw.slice(0));
+      bufCache.set(url, buf);
+      return buf;
+    } catch {
+      return null;
+    }
+  }
+
+  // ── Play a decoded buffer through a simple gain node ──────────
+  function playBuffer(buf: AudioBuffer, rate = 1.0): void {
+    const ctx = getCtx();
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.playbackRate.value = rate;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.85;
+    src.connect(gain);
+    gain.connect(getMixerGain("bowls"));
+    src.start();
+  }
+
+  // ── Inharmonic synthesis — runs instantly if sample not ready ─
+  function playSynth(freq: number): void {
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const dur = 9;
+
+    const masterGain = ctx.createGain();
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -18;
+    comp.knee.value = 10;
+    comp.ratio.value = 6;
+    comp.attack.value = 0.003;
+    comp.release.value = 0.3;
+    masterGain.gain.value = 0.78;
+    masterGain.connect(comp);
+    comp.connect(getMixerGain("bowls"));
+
+    // Inharmonic partials characteristic of real singing bowls
+    const partials: [number, number][] = [
+      [1, 0.6],
+      [2.756, 0.22],
+      [5.404, 0.09],
+      [8.933, 0.03],
+    ];
+    for (const [mult, amp] of partials) {
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq * mult, now);
+      osc.frequency.setTargetAtTime(freq * mult * 1.0008, now + 0.1, 2.5);
+      env.gain.setValueAtTime(0, now);
+      env.gain.linearRampToValueAtTime(amp, now + 0.045);
+      env.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+      osc.connect(env);
+      env.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + dur + 0.1);
+    }
+  }
+
+  // ── Gapless loop via lookahead crossfade scheduler ───────────
+  // src.loop = true makes a hard cut at the loop boundary; any waveform
+  // discontinuity (even with a WAV) causes a click. Instead we schedule
+  // overlapping BufferSourceNodes with a short crossfade at each boundary.
+  // setInterval is only for lookahead re-scheduling — all timing is on the
+  // Web Audio clock, so JS-timer jitter (~50 ms) never touches the audio.
+  const DRONE_GAIN = 0.8;
+  const FADE_DUR = 4.0; // 4 s fade-out baked into the end of every recording
+  const XFADE_DUR = 0.06; // 60 ms — synth drone / bansuri / chimes
+  const TANPURA_XFADE = 2.0; // 2 s — long breathable crossfade for tanpura
+  const NATURE_XFADE = 3.0; // 3 s — ambient nature loops
+  const LOOKAHEAD = 3.0; // schedule this many seconds ahead of audio clock
+  const SCHED_MS = 400; // how often to top up the schedule (ms)
+
+  function startDroneLoop(
+    buf: AudioBuffer,
+    destination: AudioNode,
+    rate = 1.0,
+    xfade = XFADE_DUR,
+  ): { stop: (fadeDur?: number) => void } {
+    const ctx = getCtx();
+    const loopDur = buf.duration / rate; // real-time length at this playback rate
+
+    // Master: overall fade-in / fade-out envelope
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0, ctx.currentTime);
+    master.gain.linearRampToValueAtTime(DRONE_GAIN, ctx.currentTime + 2);
+    master.connect(destination);
+
+    let stopped = false;
+    let nextT = ctx.currentTime;
+    const srcs: AudioBufferSourceNode[] = [];
+
+    function fill(horizon: number): void {
+      while (nextT < horizon) {
+        const t = nextT;
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.playbackRate.value = rate;
+
+        // Per-instance crossfade gain: ramp in, sustain, ramp out
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(1, t + xfade);
+        g.gain.setValueAtTime(1, t + loopDur - xfade);
+        g.gain.linearRampToValueAtTime(0, t + loopDur);
+
+        src.connect(g);
+        g.connect(master);
+        src.start(t);
+        src.stop(t + loopDur + 0.01); // slight tail so gain fully reaches 0
+        srcs.push(src);
+
+        // Next instance starts xfade before this one ends — they overlap
+        nextT += loopDur - xfade;
+      }
+    }
+
+    fill(ctx.currentTime + LOOKAHEAD);
+    const ticker = setInterval(() => {
+      if (stopped) return clearInterval(ticker);
+      fill(ctx.currentTime + LOOKAHEAD);
+    }, SCHED_MS);
+
+    return {
+      stop(fadeDur = 1.5) {
+        stopped = true;
+        clearInterval(ticker);
+        const now = ctx.currentTime;
+        master.gain.cancelScheduledValues(now);
+        master.gain.setValueAtTime(master.gain.value || DRONE_GAIN, now);
+        master.gain.linearRampToValueAtTime(0, now + fadeDur);
+        srcs.forEach((s) => {
+          try {
+            s.stop(now + fadeDur + 0.1);
+          } catch {}
+        });
+      },
+    };
+  }
+
+  async function toggleDroneNote(
+    btn: HTMLButtonElement,
+    getCtrl: () => DroneCtrl,
+    setCtrl: (c: DroneCtrl) => void,
+    mixId: string,
+    groupSel: string,
+  ): Promise<void> {
+    const src = btn.dataset.src ?? "";
+    const rate = parseFloat(btn.dataset.rate ?? "1");
+    const note = btn.dataset.note ?? "";
+
+    const current = getCtrl();
+    if (current) {
+      const wasThisNote = current.note === note;
+      current.stop(1.5);
+      setCtrl(null);
+      document.querySelectorAll<HTMLButtonElement>(groupSel).forEach((b) => {
+        b.classList.remove("active");
+        b.setAttribute("aria-pressed", "false");
+      });
+      if (wasThisNote) return;
+    }
+
+    if (!src) return;
+    const buf = await getBuffer(src);
+    if (!buf) return;
+
+    setCtrl({
+      note,
+      rate,
+      ...startDroneLoop(
+        buf,
+        getMixerGain(mixId),
+        rate,
+        mixId === "tanpura" ? TANPURA_XFADE : XFADE_DUR,
+      ),
+    });
+    btn.classList.add("active");
+    btn.setAttribute("aria-pressed", "true");
+  }
+
+  // ── Main: try real sample, fall back to synthesis ─────────────
+  async function playBowl(btn: HTMLButtonElement): Promise<void> {
+    const src = btn.dataset.src ?? "";
+    const rate = parseFloat(btn.dataset.rate ?? "1");
+    const freq = parseFloat(btn.dataset.freq ?? "256");
+    if (src) {
+      const buf = await getBuffer(src);
+      if (buf) {
+        playBuffer(buf, rate);
+        return;
+      }
+    }
+    playSynth(freq);
+  }
+
+  // ── Ripple animation ──────────────────────────────────────────
+  function addRipple(btn: HTMLElement): void {
+    const r1 = document.createElement("span");
+    r1.className = "sb-ripple";
+    const r2 = document.createElement("span");
+    r2.className = "sb-ripple sb-ripple--2";
+    btn.appendChild(r1);
+    btn.appendChild(r2);
+    r1.addEventListener("animationend", () => r1.remove(), { once: true });
+    r2.addEventListener("animationend", () => r2.remove(), { once: true });
+  }
+
+  // ── Recorder (WAV) ────────────────────────────────────────────
+
+  function formatRecDuration(ms: number): string {
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    return `${String(m).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+  }
+
+  // Encode mono Float32 PCM chunks → 16-bit WAV Blob
+  function encodeWav(samples: Float32Array[], sampleRate: number): Blob {
+    const totalLen = samples.reduce((n, a) => n + a.length, 0);
+    const dataLen = totalLen * 2; // 16-bit = 2 bytes per sample
+    const buf = new ArrayBuffer(44 + dataLen);
+    const v = new DataView(buf);
+
+    const str = (off: number, s: string) => {
+      for (let i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i));
+    };
+
+    str(0, "RIFF");
+    v.setUint32(4, 36 + dataLen, true);
+    str(8, "WAVE");
+    str(12, "fmt ");
+    v.setUint32(16, 16, true);         // chunk size
+    v.setUint16(20, 1, true);          // PCM format
+    v.setUint16(22, 1, true);          // mono
+    v.setUint32(24, sampleRate, true);
+    v.setUint32(28, sampleRate * 2, true); // byteRate
+    v.setUint16(32, 2, true);          // blockAlign
+    v.setUint16(34, 16, true);         // bitsPerSample
+    str(36, "data");
+    v.setUint32(40, dataLen, true);
+
+    let offset = 44;
+    for (const chunk of samples) {
+      for (let i = 0; i < chunk.length; i++) {
+        const s = Math.max(-1, Math.min(1, chunk[i]));
+        v.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+        offset += 2;
+      }
+    }
+
+    return new Blob([buf], { type: "audio/wav" });
+  }
+
+  function startRecording(btn: HTMLButtonElement, textEl: HTMLElement): void {
+    const ctx = getCtx();
+    recSampleRate = ctx.sampleRate;
+    recSamples = [];
+
+    // Fade gain lets us ramp the recording to silence before saving
+    recFadeGain = ctx.createGain();
+    recFadeGain.gain.value = 1;
+
+    // ScriptProcessorNode captures mono PCM from the analyser output.
+    // Deprecated but universally supported; AudioWorklet would need a public worklet file.
+    scriptProcessor = ctx.createScriptProcessor(4096, 1, 1);
+    scriptProcessor.addEventListener("audioprocess", (e) => {
+      // Copy the buffer — the underlying ArrayBuffer is recycled after the event
+      recSamples.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+    });
+
+    // Route: analyser → recFadeGain → scriptProcessor → silent sink
+    const silent = ctx.createGain();
+    silent.gain.value = 0;
+    silent.connect(ctx.destination);
+    getAnalyser(ctx).connect(recFadeGain);
+    recFadeGain.connect(scriptProcessor);
+    scriptProcessor.connect(silent);
+
+    recStartTime = Date.now();
+    btn.classList.add("sb-rec-btn--active");
+    btn.setAttribute("aria-label", "Stop recording and download");
+    btn.setAttribute("aria-pressed", "true");
+    textEl.textContent = "00:00";
+
+    recTimerInterval = setInterval(() => {
+      textEl.textContent = formatRecDuration(Date.now() - recStartTime);
+    }, 1000);
+  }
+
+  function stopRecording(btn: HTMLButtonElement, textEl: HTMLElement): void {
+    if (recTimerInterval) {
+      clearInterval(recTimerInterval);
+      recTimerInterval = null;
+    }
+
+    // Snapshot and clear module-level refs so re-entrant calls are safe
+    const proc = scriptProcessor;
+    const fadeGain = recFadeGain;
+    const analyser = analyserNode;
+    scriptProcessor = null;
+    recFadeGain = null;
+
+    // Immediately update UI: pulsing dot stops, button shows "Saving…" and is locked
+    btn.classList.remove("sb-rec-btn--active");
+    btn.setAttribute("aria-pressed", "false");
+    btn.setAttribute("aria-label", "Saving recording…");
+    btn.disabled = true;
+    textEl.textContent = "Saving…";
+
+    // Ramp the recording chain to silence over FADE_DUR seconds
+    if (fadeGain && audioCtx) {
+      const now = audioCtx.currentTime;
+      fadeGain.gain.setValueAtTime(fadeGain.gain.value, now);
+      fadeGain.gain.linearRampToValueAtTime(0, now + FADE_DUR);
+    }
+
+    // After the fade, disconnect the capture graph, encode, and download
+    setTimeout(() => {
+      try { analyser?.disconnect(fadeGain!); } catch {}
+      try { fadeGain?.disconnect(); } catch {}
+      try { proc?.disconnect(); } catch {}
+
+      if (recSamples.length > 0) {
+        const blob = encodeWav(recSamples, recSampleRate);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `sound-bath-${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.wav`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+      recSamples = [];
+
+      btn.disabled = false;
+      btn.setAttribute("aria-label", "Start recording");
+      textEl.textContent = "Rec";
+    }, (FADE_DUR + 0.3) * 1000);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  function initSoundBath(): void {
+    // Splash screen: auto-dismiss after 4 s, or on click
+    const splash = document.getElementById("sb-splash") as HTMLElement | null;
+    if (splash) {
+      const hideSplash = () => {
+        splash.classList.add("sb-splash--hidden");
+        splash.addEventListener("transitionend", () => splash.remove(), {
+          once: true,
+        });
+      };
+      setTimeout(hideSplash, 4000);
+      splash.addEventListener("click", hideSplash, { once: true });
+    }
+
+    // Measure nav height so the console fills correctly below it
+    const navEl = document.querySelector<HTMLElement>(".nav");
+    if (navEl) {
+      document.documentElement.style.setProperty(
+        "--nav-h",
+        navEl.offsetHeight + "px",
+      );
+    }
+
+    // Tab switching
+    document.querySelectorAll<HTMLButtonElement>(".sb-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const panelId = tab.dataset.sbPanel ?? "";
+        document.querySelectorAll<HTMLButtonElement>(".sb-tab").forEach((t) => {
+          t.classList.remove("sb-tab--active");
+          t.setAttribute("aria-selected", "false");
+        });
+        document.querySelectorAll<HTMLElement>(".sb-panel").forEach((p) => {
+          p.hidden = true;
+        });
+        tab.classList.add("sb-tab--active");
+        tab.setAttribute("aria-selected", "true");
+        const panel = document.getElementById("sb-panel-" + panelId);
+        if (panel) panel.hidden = false;
+      });
+    });
+
+    // ── Mixer toggle ───────────────────────────────────────────────
+    const consoleBody =
+      document.querySelector<HTMLDivElement>(".sb-console-body");
+    const mixToggleBtn = document.getElementById(
+      "mix-toggle-btn",
+    ) as HTMLButtonElement | null;
+    const mixBackdrop = document.getElementById(
+      "mix-backdrop",
+    ) as HTMLDivElement | null;
+
+    function setMixerOpen(open: boolean): void {
+      consoleBody?.setAttribute("data-mixer-open", open ? "true" : "false");
+      mixToggleBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    // On mobile, default to closed
+    if (window.matchMedia("(max-width: 780px)").matches) {
+      setMixerOpen(false);
+    }
+
+    mixToggleBtn?.addEventListener("click", () => {
+      const isOpen = consoleBody?.getAttribute("data-mixer-open") === "true";
+      setMixerOpen(!isOpen);
+    });
+    mixBackdrop?.addEventListener("click", () => setMixerOpen(false));
+
+    // ── Scope canvas setup ─────────────────────────────────────────
+    const canvasEl = document.getElementById(
+      "scope-canvas",
+    ) as HTMLCanvasElement | null;
+    if (canvasEl) {
+      scopeCanvas = canvasEl;
+      scopeCtx2d = canvasEl.getContext("2d");
+
+      const resizeScopeCanvas = () => {
+        const dpr = window.devicePixelRatio || 1;
+        const w = canvasEl.offsetWidth;
+        const h = canvasEl.offsetHeight;
+        if (w === 0 || h === 0) return;
+        canvasEl.width = w * dpr;
+        canvasEl.height = h * dpr;
+        // Scale is reset when canvas dimensions change, so re-apply
+        if (scopeCtx2d) scopeCtx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+
+      resizeScopeCanvas();
+      new ResizeObserver(resizeScopeCanvas).observe(canvasEl);
+      startScopeLoop();
+    }
+
+    const bowls = document.querySelectorAll<HTMLButtonElement>(".sb-bowl");
+    if (!bowls.length) return;
+
+    bowls.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        // Visuals are instant; audio resolves async
+        addRipple(btn);
+        btn.classList.add("playing");
+        clearTimeout((btn as any)._playTimer);
+        (btn as any)._playTimer = setTimeout(
+          () => btn.classList.remove("playing"),
+          5500,
+        );
+        playBowl(btn);
+      });
+    });
+
+    document
+      .querySelectorAll<HTMLButtonElement>(
+        ".sb-drone-note:not(.sb-drone-note--tanpura):not(.sb-drone-note--tanpura-ma)",
+      )
+      .forEach((btn) => {
+        btn.addEventListener("click", () =>
+          toggleDroneNote(
+            btn,
+            () => droneController,
+            (c) => {
+              droneController = c;
+            },
+            "drone",
+            ".sb-drone-note:not(.sb-drone-note--tanpura):not(.sb-drone-note--tanpura-ma)",
+          ),
+        );
+      });
+    document
+      .querySelectorAll<HTMLButtonElement>(".sb-drone-note--tanpura")
+      .forEach((btn) => {
+        btn.addEventListener("click", () =>
+          toggleDroneNote(
+            btn,
+            () => tanpuraController,
+            (c) => {
+              tanpuraController = c;
+            },
+            "tanpura",
+            ".sb-drone-note--tanpura",
+          ),
+        );
+      });
+    document
+      .querySelectorAll<HTMLButtonElement>(".sb-drone-note--tanpura-ma")
+      .forEach((btn) => {
+        btn.addEventListener("click", () =>
+          toggleDroneNote(
+            btn,
+            () => tanpuraMaController,
+            (c) => {
+              tanpuraMaController = c;
+            },
+            "tanpura",
+            ".sb-drone-note--tanpura-ma",
+          ),
+        );
+      });
+
+    // Flute key selector
+    document
+      .querySelectorAll<HTMLButtonElement>(".sb-flute-key")
+      .forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const rate = parseFloat(btn.dataset.rate ?? "1");
+          const note = btn.dataset.note ?? "C";
+          fluteKey = { note, rate };
+          document
+            .querySelectorAll<HTMLButtonElement>(".sb-flute-key")
+            .forEach((b) => {
+              b.classList.remove("active");
+              b.setAttribute("aria-pressed", "false");
+            });
+          btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
+          // Re-pitch any currently-playing flute loops
+          const activeFluteBtns = document.querySelectorAll<HTMLButtonElement>(
+            '.bl-btn.active[data-mix-id="flute"]',
+          );
+          for (const fluteBtn of activeFluteBtns) {
+            const fluteSrc = fluteBtn.dataset.src ?? "";
+            if (!fluteSrc) continue;
+            bansuriControllers.get(fluteSrc)?.stop(0.3);
+            bansuriControllers.delete(fluteSrc);
+            const fluteBuf = await getBuffer(fluteSrc);
+            if (!fluteBuf) continue;
+            bansuriControllers.set(
+              fluteSrc,
+              startDroneLoop(fluteBuf, getMixerGain("flute"), rate),
+            );
+          }
+        });
+      });
+
+    // Bansuri loop toggles — each button independently controls its own loop
+    document.querySelectorAll<HTMLButtonElement>(".bl-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const src = btn.dataset.src ?? "";
+        if (!src) return;
+
+        const existing = bansuriControllers.get(src);
+        if (existing) {
+          existing.stop(1.5);
+          bansuriControllers.delete(src);
+          btn.classList.remove("active");
+          btn.setAttribute("aria-pressed", "false");
+          return;
+        }
+
+        const buf = await getBuffer(src);
+        if (!buf) return;
+
+        const mixId = btn.dataset.mixId ?? src;
+        // Flute loops use the independently-selected key; chimes and nature are unpitched
+        const fluteRate = mixId === "flute" ? fluteKey.rate : 1;
+        const xfade = mixId === "nature" ? NATURE_XFADE : XFADE_DUR;
+        bansuriControllers.set(
+          src,
+          startDroneLoop(buf, getMixerGain(mixId), fluteRate, xfade),
+        );
+        btn.classList.add("active");
+        btn.setAttribute("aria-pressed", "true");
+      });
+    });
+
+    // Mixer fader events — update gain in real time; never create AudioContext on slider move
+    document
+      .querySelectorAll<HTMLInputElement>(".mix-fader")
+      .forEach((slider) => {
+        const id = slider.dataset.mixId ?? "";
+        const valEl = document.getElementById("mix-" + id + "-val");
+        slider.addEventListener("input", () => {
+          if (valEl) valEl.textContent = slider.value;
+          const existing = mixerGains.get(id);
+          if (existing && audioCtx) {
+            // setTargetAtTime for smooth gain change (avoids zipper noise)
+            existing.gain.setTargetAtTime(
+              parseFloat(slider.value) / 100,
+              audioCtx.currentTime,
+              0.016,
+            );
+          }
+        });
+
+        // Mousewheel nudge — scroll up = louder, step proportional to range
+        const wheelStep = Math.max(1, Math.round(parseFloat(slider.max) / 20));
+        slider.addEventListener("wheel", (e) => {
+          e.preventDefault();
+          const next = Math.min(
+            parseFloat(slider.max),
+            Math.max(0, parseFloat(slider.value) - Math.sign(e.deltaY) * wheelStep),
+          );
+          slider.value = String(next);
+          slider.dispatchEvent(new Event("input", { bubbles: false }));
+        }, { passive: false });
+      });
+
+    const doSilence = () => {
+      // Fade all audio over 5 seconds
+      droneController?.stop(FADE_DUR);
+      droneController = null;
+      tanpuraController?.stop(FADE_DUR);
+      tanpuraController = null;
+      bansuriControllers.forEach((ctrl) => ctrl.stop(FADE_DUR));
+      bansuriControllers.clear();
+
+      // Reset UI immediately so buttons look inactive right away
+      document
+        .querySelectorAll<HTMLButtonElement>(".sb-drone-note")
+        .forEach((b) => {
+          b.classList.remove("active");
+          b.setAttribute("aria-pressed", "false");
+        });
+      document.querySelectorAll<HTMLButtonElement>(".bl-btn").forEach((b) => {
+        b.classList.remove("active");
+        b.setAttribute("aria-pressed", "false");
+      });
+      bowls.forEach((b) => {
+        b.classList.remove("playing");
+        clearTimeout((b as any)._playTimer);
+      });
+
+      // Stop recorder before closing the context
+      const recBtnEl = document.getElementById(
+        "sb-rec-btn",
+      ) as HTMLButtonElement | null;
+      const recTextEl = document.getElementById(
+        "sb-rec-text",
+      ) as HTMLElement | null;
+      if (recBtnEl && recTextEl && (scriptProcessor || recFadeGain)) {
+        stopRecording(recBtnEl, recTextEl);
+      }
+
+      // Close the AudioContext after the fade finishes
+      setTimeout(
+        () => {
+          audioCtx?.close().then(() => {
+            audioCtx = null;
+            bufCache.clear();
+            mixerGains.clear();
+            analyserNode = null;
+            scopeData = null;
+          });
+        },
+        (FADE_DUR + 0.2) * 1000,
+      );
+    };
+    document
+      .getElementById("sb-tab-silence")
+      ?.addEventListener("click", doSilence);
+
+    // ── Recorder button ────────────────────────────────────────────
+    const recBtn = document.getElementById(
+      "sb-rec-btn",
+    ) as HTMLButtonElement | null;
+    const recText = document.getElementById(
+      "sb-rec-text",
+    ) as HTMLElement | null;
+    if (recBtn && recText) {
+      recBtn.addEventListener("click", () => {
+        const isRecording = recBtn.getAttribute("aria-pressed") === "true";
+        if (isRecording) {
+          stopRecording(recBtn, recText);
+        } else {
+          startRecording(recBtn, recText);
+        }
+      });
+    }
+
+    // Pre-fetch all sample files when the browser is idle so first tap is instant
+    const schedule =
+      typeof requestIdleCallback !== "undefined"
+        ? (fn: () => void) => requestIdleCallback(fn, { timeout: 4000 })
+        : (fn: () => void) => setTimeout(fn, 1500);
+
+    schedule(() => {
+      // Single bowl file powers all pitched bowls
+      prefetchRaw("/audio/soundbath/bowl-c.mp3");
+      // Pre-fetch drone files (one file per instrument, all notes pitched via playbackRate)
+      prefetchRaw("/audio/soundbath/drone-c.wav");
+      prefetchRaw("/audio/soundbath/tanpura-c.mp3");
+      // Pre-fetch bansuri files
+      document.querySelectorAll<HTMLButtonElement>(".bl-btn").forEach((btn) => {
+        const src = btn.dataset.src;
+        if (src) prefetchRaw(src);
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", initSoundBath);
+</script>

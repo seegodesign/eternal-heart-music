@@ -1,0 +1,265 @@
+---
+// Decorative waveform bars — heights give the impression of a live scope reading
+const bars = [10, 24, 44, 62, 80, 72, 52, 36, 18, 32, 58, 76, 88, 66, 42, 22, 14, 28, 52, 38];
+
+// Bowl notes with colours matching the actual app
+const bowls = [
+  { note: "C", color: "#b85530", size: 58 },
+  { note: "D", color: "#c87230", size: 54 },
+  { note: "E", color: "#c8a030", size: 50 },
+  { note: "F", color: "#5a8852", size: 46 },
+  { note: "G", color: "#4878a0", size: 42 },
+  { note: "A", color: "#6858a8", size: 38 },
+  { note: "B", color: "#a090c8", size: 34 },
+];
+
+const features = [
+  {
+    label: "Crystal Singing Bowls",
+    desc: "All seven notes — C through B — each with natural harmonic decay.",
+  },
+  {
+    label: "Drones & Ragas",
+    desc: "Tanpura, synth drone, and six authentic bansuri raga loops.",
+  },
+  {
+    label: "8-Channel Mixer",
+    desc: "Blend every layer in real time with faders or the scroll wheel.",
+  },
+  {
+    label: "Record Your Session",
+    desc: "Capture a WAV file of your custom mix to keep or share.",
+  },
+];
+---
+
+<section class="section sbp" id="sound-bath-promo">
+  <div class="sbp__orb sbp__orb--left" aria-hidden="true"></div>
+  <div class="sbp__orb sbp__orb--right" aria-hidden="true"></div>
+
+  <div class="container--wide">
+    <div class="sbp__inner">
+
+      <!-- ── Left: text ─────────────────────────────────────── -->
+      <div class="sbp__text reveal">
+        <span class="eyebrow">Interactive Experience</span>
+        <h2 class="sbp__headline">
+          Strike the bowls.<br />
+          <em>Shape the silence.</em>
+        </h2>
+        <div class="divider"></div>
+        <p class="sbp__body">
+          A living sound bath you control — strike resonant crystal bowls, layer
+          drone and tanpura, choose your bansuri raga, and blend everything in a
+          real-time mixer. Record the whole session as a WAV to carry with you.
+        </p>
+        <ul class="sbp__features" role="list">
+          {
+            features.map((f) => (
+              <li class="sbp__feature">
+                <span class="sbp__feature-mark" aria-hidden="true">◎</span>
+                <div>
+                  <strong class="sbp__feature-label">{f.label}</strong>
+                  <p class="sbp__feature-desc">{f.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+        <a href="/interactive-sound-bath" class="btn btn--primary sbp__cta">
+          Enter the Sound Bath
+        </a>
+      </div>
+
+      <!-- ── Right: decorative visual ──────────────────────── -->
+      <div class="sbp__visual reveal reveal-delay-2" aria-hidden="true">
+
+        <!-- Animated scope strip -->
+        <div class="sbp__scope">
+          <div class="sbp__bars">
+            {
+              bars.map((peak, i) => (
+                <div
+                  class="sbp__bar"
+                  style={`--peak: ${peak}px; --delay: ${(i * 0.07).toFixed(2)}s`}
+                />
+              ))
+            }
+          </div>
+          <span class="sbp__scope-label">Live Waveform</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Section shell ───────────────────────────────────────── */
+  .sbp {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sbp__orb {
+    position: absolute;
+    width: 560px;
+    height: 560px;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+  }
+  .sbp__orb--left {
+    top: -10%;
+    left: -15%;
+    background: radial-gradient(circle, rgba(200, 136, 58, 0.07) 0%, transparent 70%);
+  }
+  .sbp__orb--right {
+    bottom: -20%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(122, 144, 112, 0.1) 0%, transparent 70%);
+  }
+
+  /* ── Two-column grid ─────────────────────────────────────── */
+  .sbp__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .sbp__inner {
+      grid-template-columns: 1fr;
+      gap: 52px;
+    }
+  }
+
+  /* ── Left column ─────────────────────────────────────────── */
+  .sbp__headline {
+    font-family: var(--font-serif);
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--color-cream);
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .sbp__headline em {
+    font-style: italic;
+    color: var(--color-amber-light);
+  }
+
+  .sbp__body {
+    font-size: 1.025rem;
+    line-height: 1.85;
+    color: var(--color-cream-dim);
+    margin-bottom: 40px;
+    max-width: 50ch;
+  }
+
+  /* ── Feature list ────────────────────────────────────────── */
+  .sbp__features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 44px;
+  }
+
+  .sbp__feature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .sbp__feature-mark {
+    color: var(--color-amber);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .sbp__feature-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-cream);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .sbp__feature-desc {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--color-cream-dim);
+  }
+
+  .sbp__cta {
+    display: inline-flex;
+  }
+
+  /* ── Right column: scope ─────────────────────────────────── */
+  .sbp__visual {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .sbp__scope {
+    width: 100%;
+    background: rgba(9, 8, 10, 0.6);
+    border: 1px solid var(--color-border-hi);
+    border-radius: 12px;
+    padding: 28px 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .sbp__bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 96px;
+    gap: 3px;
+  }
+
+  .sbp__bar {
+    flex: 1;
+    min-width: 3px;
+    max-width: 12px;
+    background: linear-gradient(to top, var(--color-amber), rgba(200, 136, 58, 0.3));
+    border-radius: 2px 2px 0 0;
+    animation: sbp-bar-pulse 1.4s ease-in-out infinite alternate;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes sbp-bar-pulse {
+    from {
+      height: 6px;
+      opacity: 0.25;
+    }
+    to {
+      height: var(--peak, 40px);
+      opacity: 0.85;
+    }
+  }
+
+  .sbp__scope-label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+    opacity: 0.5;
+    text-align: right;
+  }
+
+</style>
