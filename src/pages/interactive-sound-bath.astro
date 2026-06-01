@@ -204,7 +204,8 @@ const drones = [
               alt=""
               aria-hidden="true"
             />
-            Stop
+            <span class="sb-tab-silence__text">Stop</span>
+            <span class="sb-tab-silence__countdown" aria-live="assertive" hidden></span>
           </button>
           <button
             class="sb-rec-btn"
@@ -426,7 +427,6 @@ const drones = [
                           </>
                         </span>
                         <span class="bl-btn__name">{loop.name}</span>
-                        <span class="bl-btn__dot" aria-hidden="true" />
                       </button>
                     ))
                   }
@@ -467,7 +467,6 @@ const drones = [
                         </>
                       </span>
                       <span class="bl-btn__name">{loop.name}</span>
-                      <span class="bl-btn__dot" aria-hidden="true" />
                     </button>
                   ))
                 }
@@ -496,7 +495,6 @@ const drones = [
                         </>
                       </span>
                       <span class="bl-btn__name">{loop.name}</span>
-                      <span class="bl-btn__dot" aria-hidden="true" />
                     </button>
                   ))
                 }
@@ -525,7 +523,6 @@ const drones = [
                         </>
                       </span>
                       <span class="bl-btn__name">{loop.name}</span>
-                      <span class="bl-btn__dot" aria-hidden="true" />
                     </button>
                   ))
                 }
@@ -853,6 +850,15 @@ const drones = [
     filter: invert(30%) sepia(90%) saturate(400%) hue-rotate(350deg)
       brightness(110%);
   }
+  .sb-tab-silence__countdown {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(220, 80, 60, 0.8);
+    min-width: 1ch;
+    text-align: center;
+  }
 
   /* ── Record button ───────────────────────────────────────── */
   .sb-rec-btn {
@@ -944,9 +950,9 @@ const drones = [
     pointer-events: none;
     z-index: -1;
   }
-  /* #sb-panel-drone::before {
-    background-image: url('/images/studio.avif');
-  } */
+  #sb-panel-drone::before {
+    background-image: url('/images/tanpura.webp');
+  }
   #sb-panel-bowls::before {
     background-image: url("/images/bowls.avif");
   }
@@ -1385,25 +1391,6 @@ const drones = [
     color: rgba(200, 136, 58, 1);
     flex: 1;
   }
-  .bl-btn.active .bl-btn__name {
-    color: var(--color-amber);
-  }
-
-  .bl-btn__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    border: 1px solid rgba(200, 136, 58, 0.3);
-    transition:
-      background 0.25s,
-      border-color 0.25s;
-    flex-shrink: 0;
-  }
-  .bl-btn.active .bl-btn__dot {
-    background: var(--color-amber);
-    border-color: var(--color-amber);
-    box-shadow: 0 0 6px rgba(200, 136, 58, 0.5);
-  }
 
   /* ── Mixer aside ─────────────────────────────────────────── */
   @keyframes mix-logo-pulse {
@@ -1705,6 +1692,10 @@ const drones = [
       width: 9px;
       height: 9px;
     }
+    .bl-ambience-columns {
+      gap: 10px;
+    }
+
     .sb-drone-note {
       width: 48px;
       height: 48px;
@@ -1749,6 +1740,9 @@ const drones = [
       flex-wrap: wrap;
       justify-content: center;
       gap: 8px;
+    }
+    .mix-logomark {
+      display: none;
     }
     /* Semi-transparent backdrop behind the mixer overlay */
     .mix-backdrop {
@@ -1814,6 +1808,13 @@ const drones = [
     }
     .sb-bowl--sharp {
       margin-left: 0 !important;
+    }
+    .bl-grid {
+      gap: 8px;
+    }
+    .bl-btn {
+      padding: 11px 14px;
+      gap: 10px;
     }
   }
 </style>
@@ -2641,6 +2642,30 @@ const drones = [
       });
 
     const doSilence = () => {
+      // Start countdown on the button
+      const silenceBtn = document.getElementById("sb-tab-silence") as HTMLButtonElement | null;
+      const silenceIcon = silenceBtn?.querySelector<HTMLElement>(".sb-tab-silence__icon");
+      const silenceText = silenceBtn?.querySelector<HTMLElement>(".sb-tab-silence__text");
+      const silenceCountdown = silenceBtn?.querySelector<HTMLElement>(".sb-tab-silence__countdown");
+      if (silenceBtn && silenceIcon && silenceText && silenceCountdown) {
+        silenceBtn.disabled = true;
+        silenceText.hidden = true;
+        silenceCountdown.hidden = false;
+        let remaining = Math.ceil(FADE_DUR);
+        silenceCountdown.textContent = String(remaining);
+        const tick = setInterval(() => {
+          remaining -= 1;
+          if (remaining <= 0) {
+            clearInterval(tick);
+            silenceCountdown.hidden = true;
+            silenceText.hidden = false;
+            silenceBtn.disabled = false;
+          } else {
+            silenceCountdown.textContent = String(remaining);
+          }
+        }, 1000);
+      }
+
       // Fade all audio over 5 seconds
       droneController?.stop(FADE_DUR);
       droneController = null;
