@@ -50,20 +50,22 @@
 
 <!-- Mobile overlay menu -->
 <div id="mobile-menu" class="mob-menu" aria-hidden="true">
-  <nav class="mob-menu__links" aria-label="Mobile navigation">
-    <a href="/about" class="mob-menu__link">About</a>
-    <a href="/contact" class="mob-menu__link">Contact</a>
-    <a href="/custom-songs" class="mob-menu__link">Custom Songs</a>
-    <a href="/music" class="mob-menu__link">Discography</a>
-    <!-- <a href="/events" class="mob-menu__link">Events</a> -->
-    <a href="/faq" class="mob-menu__link">FAQ</a>
-    <a href="/journal" class="mob-menu__link">Journal</a>
-    <a href="/music-therapy" class="mob-menu__link">Music Therapy</a>
-    <a href="/interactive-sound-bath" class="mob-menu__link">Interactive Sound Bath</a>
-    <!-- <a href="/testimonials" class="mob-menu__link">Testimonials</a> -->
-    <a href="/press" class="mob-menu__link">Press & Media</a>
-  </nav>
-  <a href="/contact" class="btn btn--primary mob-menu__cta">Book a Sound Journey</a>
+  <div class="mob-menu__body">
+    <nav class="mob-menu__links" aria-label="Mobile navigation">
+      <a href="/about" class="mob-menu__link">About</a>
+      <a href="/contact" class="mob-menu__link">Contact</a>
+      <a href="/custom-songs" class="mob-menu__link">Custom Songs</a>
+      <a href="/music" class="mob-menu__link">Discography</a>
+      <!-- <a href="/events" class="mob-menu__link">Events</a> -->
+      <a href="/faq" class="mob-menu__link">FAQ</a>
+      <a href="/journal" class="mob-menu__link">Journal</a>
+      <a href="/music-therapy" class="mob-menu__link">Music Therapy</a>
+      <a href="/interactive-sound-bath" class="mob-menu__link">Interactive Sound Bath</a>
+      <!-- <a href="/testimonials" class="mob-menu__link">Testimonials</a> -->
+      <a href="/press" class="mob-menu__link">Press & Media</a>
+    </nav>
+    <a href="/contact" class="btn btn--primary mob-menu__cta">Book a Sound Journey</a>
+  </div>
 </div>
 
 <style>
@@ -154,20 +156,26 @@
   .mob-menu {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     position: fixed;
     inset: 0;
     z-index: 190;
     background: rgba(9, 8, 10, 0.88);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    padding: 100px 40px 60px;
+    padding-top: 90px;
     opacity: 0;
     pointer-events: none;
     transform: translateX(100%);
     transition: opacity 0.35s ease, transform 0.35s ease;
+    overflow: hidden;
+  }
+  .mob-menu__body {
+    flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    padding: 30px 40px 60px;
+    display: flex;
+    flex-direction: column;
   }
   .mob-menu.is-open {
     opacity: 1;

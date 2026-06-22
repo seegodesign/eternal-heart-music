@@ -1540,6 +1540,22 @@ const drones = [
     background: #e04444 !important;
   }
 
+  /* ── Larger touch targets on touch devices ─────────────── */
+  @media (pointer: coarse) {
+    .mix-fader-wrap {
+      width: 56px;
+    }
+    .mix-fader::-webkit-slider-thumb {
+      width: 28px;
+      height: 28px;
+      margin-top: -12.5px;
+    }
+    .mix-fader::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
   .mix-label {
     font-family: var(--font-sans);
     font-size: 8px;
@@ -1687,6 +1703,9 @@ const drones = [
     .sb-rec-btn {
       font-size: 0;
       gap: 0;
+    }
+    .sb-drone-grid {
+      gap: 5px;
     }
     .sb-rec-btn__dot {
       width: 9px;
